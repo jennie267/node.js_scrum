@@ -1,0 +1,97 @@
+<head>
+	<meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+	<!-- Bootstrap Core CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/css/scrum/scrum.css" rel="stylesheet">
+  <link href="/css/bootstrap.vertical-tabs.min.css" rel="stylesheet">
+  <link href="/css/metisMenu.css" rel="stylesheet">
+  <link href="/css/morris.css" rel="stylesheet">
+  <link href="/css/sb-admin-2.css" rel="stylesheet">
+  <link href="/css/bootstrap-datetimepicker.css" rel="stylesheet">
+  <link href="/css/font-awesome.css" rel="stylesheet" type="text/css">
+  <link href="/css/sweetalert2.min.css" rel="stylesheet">
+    
+  <script src="/js/jquery.min.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/metisMenu.js"></script>
+  <script src="/js/raphael.js"></script>
+  <script src="/js/sb-admin-2.js"></script>
+  <script src="/js/sweetalert2.min.js"></script>
+  <script src="/js/bootstrap-datetimepicker.js"></script>
+  <script src="/js/bootstrap-datetimepicker.ko.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+    
+<style>
+	.profile {width:70px; height:70px; border-radius:70px; overflow:hidden; margin-left: 70%; float: left;}
+	.profile img {height:70px; width:70px;}
+</style>
+<style>
+	img#chatBtn {
+    position: fixed;
+    right: 2%;
+    bottom: 50px;
+    z-index: 999;
+	}
+</style>
+
+</head>
+<body>
+<div id="wrapper">
+
+<!-- header -->
+<% include ../include/header.ejs %>
+<!-- header -->
+
+<div id="content"> 
+<!--content -->
+
+<div id="page-wrapper">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="page-header" id="taskBoardBtn">
+        <a class="btn btn-default" data-toggle="modal" data-target="#categoryModal"> Category </a> 
+        <a href="/taskboard/<%=project_list_no%>/0" class="btn btn-default"> Task Board </a> 
+        <a href="/releasePlanning/<%=project_list_no%>" class="btn btn-default active"> Release Planning </a>
+      </div>
+    </div>
+  	<!-- /.col-lg-12 -->
+	</div>
+	<!-- /.row -->
+
+
+	<!-- 포커 관련 정보를 띄운다!! -->
+  <div class='PlanningHere' style="display: flex; overflow-x: auto; overflow-y:hidden; white-space: nowrap; padding-bottom: 3%;">
+		<% categoryData.forEach(function (item,index){ %>
+			<table>
+				<tr>
+					<th><%=categoryData[index].title%></th>
+				</tr class='CateNum' value='<%=categoryData[index].category_no%>'>
+			<% storyData.forEach(function (item,ind){
+					if(storyData.length > 0){
+						if(categoryData[index].category_no == storyData[ind].category_no){%>
+								<tr>
+									<td class='pokerToDo'>
+										<%if(false){%><a class='DetailPoker' value=<%=storyData[ind].user_story_no%> data-toggle="modal" data-target="#planningPokerModal">
+										<%} else if(true){%><a class='DetailPokerMaster' value=<%=storyData[ind].user_story_no%> data-toggle="modal" data-target="#planningPokerMasterModal"><%}%>							
+										<%=storyData[ind].title%></a>
+									</td>
+								</tr class='UserStoryHere'>
+						<%}
+					};
+				});%>
+			</table>
+		<%});%>
+						
+  </div>
+</div>
+
+<!-- Script -->
+<% include ../include/releasePlanningScript.ejs %>
+<!-- Modal -->
+<% include ../Modal/categoryModal.ejs %>
+<% include ../Modal/planningPokerModal.ejs %>
+<% include ../Modal/planningPokerMasterModal.ejs %>

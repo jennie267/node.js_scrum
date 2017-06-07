@@ -1,0 +1,24 @@
+{
+  "name": "Project_ASC_SCRUM",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+		"mysql" : "*",
+		"express" : "^4",
+		"ejs" : "*",
+		"body-parser" : "*",
+		"path" : "*",
+		"ejs-locals" : "*",
+		"express-session": "*",
+		"cookie-parser" : "*",
+		"morgan" : "*",
+		"serve-favicon" : "*",
+		"socket.io" : "*",
+		"materialize-css" : "*",
+		"node-sass-middleware" : "*",
+		"moment" : "*"
+	  }
+}

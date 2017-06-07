@@ -1,0 +1,144 @@
+<!-- Modal -->
+  <div class="modal fade" id="registTodoModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header" style=" background: #354555; color: #ffffff;">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" style="font-weight : bolder;"> To Do 등록 </h4>
+          <!-- 값 변경 되어야함 스프린트 값 -->
+        </div>
+        <div class="modal-body">
+        
+        <div class="row">
+          <div class="col-xs-2 col-xs-offset-1">
+            <label for="userStoryList" style="font-size : 20px;"> User Story </label>
+          </div>
+          <div class="col-xs-8">
+            <select id = "StoryList" class='DouserStory' name='userStoryList' autofocus style="width : 100%; height: 37px; margin-top: 4px;">
+            	<!-- userStoryList -->
+            </select>
+          </div>
+        </div>
+        <br>
+
+        <div class="row">
+          <div class="col-xs-2 col-xs-offset-1">
+            <label for='Content' style="font-size : 20px;">Content</label>
+          </div>
+          <div class="col-xs-8">
+            <textarea id="Content" class='registContent' name="Content" style="resize:none; width : 100%; height : 150px;"></textarea>
+          </div>
+        </div>
+        <br>
+        
+        <div class="row">
+          <div class="col-xs-2 col-xs-offset-6">
+            <label for='workerList' style="font-size : 20px;">작업자</label>
+          </div>
+          <div class="col-xs-3">
+            <select id = "workerList" class='registWorker' name='workerList' style="width : 100%; height:30px;">
+            	<!-- WorkerList -->
+            </select>
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <div class="row">
+            <div class="col-xs-2 col-xs-offset-4">
+              <button type="button" class="btn btn-success DoAdd" style="width : 100%; font-size : 15px; font-weight : bold;">생성</button>
+            </div>
+            <div class="col-xs-2">
+              <button type="button" class="btn btn-default" data-dismiss="modal" style="width : 100%; font-size : 15px; font-weight : bold;background-color: #333;
+                color: #ffffff;">취소</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<script>
+	//SOCKET Open
+	var socket = io.connect();
+	//투두 등록 모달
+	//불러 온다 UserStory
+	function userStoryLi() {
+		//var cookieName = '${cookie.name.value}';
+		//cookieName = decodeURIComponent(cookieName);
+		//var user = cookieName;
+		$('.DouserStory').html('');
+		socket.emit('StoryList', {
+			project_release_no : <%=project_release_no%>
+		});
+	};
+			
+	//불러서 넣는다 UserStory
+	socket.on('StoryList', function (data){
+		$('.DouserStory').html('');
+		var text = $('.DouserStory');
+		var line = '';
+		//전체 조회 후 받은 데이터
+		var da = data.data;
+				
+			if(da.length > 0){
+				for(var i = 0; i < da.length; i++){
+					line += "<option value='"+da[i].user_story_no+"'>"+da[i].title+"</option>"
+				};
+        $(line).appendTo(text);
+			};
+		});
+			
+		//불러 온다 유저
+		function userWorkerLi() {
+			//var cookieName = '${cookie.name.value}';
+			//cookieName = decodeURIComponent(cookieName);
+			//var user = cookieName;
+			$('.registWorker').html('');
+			socket.emit('DoUserList', {
+				project_list_no : <%=project_list_no%>					
+			});
+		};
+		
+		//불러서 넣는다 유저
+		socket.on('DoUser', function (data){
+			$('.registWorker').html('');
+			var text = $('.registWorker');
+			var line = '';
+			//전체 조회 후 받은 데이터
+			var list = data.list;
+			var user = data.user;
+			if(user.length > 0){
+				for(var i = 0; i < user.length; i++){
+					for(var j = 0; j < list.length; j++){
+						if(user[i].user_no == list[j].user_no){
+							line += "<option value='"+user[i].user_no+"'>"+list[j].name+"</option>"
+						}
+					}
+				};
+         $(line).appendTo(text);
+			};
+		});
+		
+		//등록 한다 Todo
+		$('.DoAdd').on('click', function(){
+			socket.emit('DoAdd', {
+				sprint_no : <%=Max%>,
+				user_story_no : $('.DouserStory').val(),
+				user_no : $('.registWorker').val(),
+				content : $('.registContent').val(),
+			});
+			$('.registContent').val('');
+			
+			$(registTodoModal).modal('hide');
+			/** 태스크 새로고침 */
+			todoLi();
+		});
+		
+		//설정한다 초기세팅
+			userStoryLi();
+			userWorkerLi();
+</script>

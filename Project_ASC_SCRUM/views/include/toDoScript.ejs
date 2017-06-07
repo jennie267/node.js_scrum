@@ -1,0 +1,248 @@
+<script>
+		//SOCKET Open
+		var socket = io.connect();
+		//투두 스크립트
+			//불러 온다 Todo-
+			function todoLi() {
+				//var cookieName = '${cookie.name.value}';
+				//cookieName = decodeURIComponent(cookieName);
+				//var user = cookieName;
+				if($('.maxSprint').val() > 0){
+					var sprint_no = $('.maxSprint').val();
+				} else {
+					var sprint_no = $('.currentSprint').val();
+				}
+				
+				var ToDo = $('.HereToToDo');
+				var Doing = $('.HereToDoing');
+				var Done = $('.HereToDone');
+				ToDo.html('');
+				Doing.html('');
+				Done.html('');
+				socket.emit('todoList', {
+					sprint_no
+				});
+			};
+			
+			//불러서 넣는다 todo
+			socket.on('todoList', function (data){
+				var ToDo = $('.HereToToDo');
+				var Doing = $('.HereToDoing');
+				var Done = $('.HereToDone');
+				ToDo.html('');
+				Doing.html('');
+				Done.html('');
+				
+				var todoLine = '';
+				var doingLine = '';
+				var doneLine = '';
+				//전체 조회 후 받은 데이터
+				var da = data.data;
+				
+				if(da.length > 0){
+					for(var i = 0; i < da.length; i++){
+						if(da[i].status == 0){
+							todoLine += "<div class='panel panel-gray'>"
+        			todoLine +=	  "<div class='panel-heading'>"
+          		todoLine +=			"<div class='row'>"
+            	todoLine +=				"<div class='col-xs-6 text-left'>"
+            	todoLine +=  				"<div class='content'>"
+            	todoLine +=   				"<a class='fa fa-pencil ModifyDo' data-toggle='modal' data-target='#modifyTodoModal' value='"+da[i].sprint_back_log_no+"'></a>"
+            	todoLine +=  				"</div> </div>"
+            	todoLine +=					"<div class='col-xs-6 text-right'>"
+            	todoLine +=  					"<div class='content'>"
+            	todoLine +=    					"<a class='fa fa-trash-o delDo' value='"+da[i].sprint_back_log_no+"'></a>"
+            	todoLine +=  					"</div> </div>"
+            	todoLine +=					"<div class='col-xs-10 col-xs-offset-1 text-center'>"
+            	todoLine +=  			"<div class='content'><a class='detailDo' data-toggle='modal' data-target='#detailTodoModal' value='"+da[i].sprint_back_log_no+"'>"+da[i].content+"</a></div>"
+            	todoLine +=			"</div> </div> </div> </div>"
+						} else if(da[i].status == 1){
+							doingLine += "<div class='panel panel-gray'>"
+        			doingLine +=	  "<div class='panel-heading'>"
+          		doingLine +=			"<div class='row'>"
+            	doingLine +=				"<div class='col-xs-6 text-left'>"
+            	doingLine +=  				"<div class='content'>"
+            	doingLine +=   				"<a class='fa fa-pencil ModifyDo' data-toggle='modal' data-target='#modifyTodoModal' value='"+da[i].sprint_back_log_no+"'></a>"
+            	doingLine +=  				"</div> </div>"
+            	doingLine +=					"<div class='col-xs-6 text-right'>"
+            	doingLine +=  					"<div class='content'>"
+            	doingLine +=    					"<a class='fa fa-trash-o delDo' value='"+da[i].sprint_back_log_no+"'></a>"
+            	doingLine +=  					"</div> </div>"
+            	doingLine +=					"<div class='col-xs-10 col-xs-offset-1 text-center'>"
+            	doingLine +=  			"<div class='content'><a class='detailDo' data-toggle='modal' data-target='#detailTodoModal' value='"+da[i].sprint_back_log_no+"'>"+da[i].content+"</a></div>"
+            	doingLine +=			"</div> </div> </div> </div>"
+						} else if(da[i].status == 2){
+							doneLine += "<div class='panel panel-gray'>"
+        			doneLine +=	  "<div class='panel-heading'>"
+          		doneLine +=			"<div class='row'>"
+            	doneLine +=				"<div class='col-xs-6 text-left'>"
+            	doneLine +=  				"<div class='content'>"
+            	doneLine +=   				"<a class='fa fa-pencil ModifyDo' data-toggle='modal' data-target='#modifyTodoModal' value='"+da[i].sprint_back_log_no+"'></a>"
+            	doneLine +=  				"</div> </div>"
+            	doneLine +=					"<div class='col-xs-6 text-right'>"
+            	doneLine +=  					"<div class='content'>"
+            	doneLine +=    					"<a class='fa fa-trash-o delDo' value='"+da[i].sprint_back_log_no+"'></a>"
+            	doneLine +=  					"</div> </div>"
+            	doneLine +=					"<div class='col-xs-10 col-xs-offset-1 text-center'>"
+            	doneLine +=  			"<div class='content'><a class='detailDo' data-toggle='modal' data-target='#detailTodoModal' value='"+da[i].sprint_back_log_no+"'>"+da[i].content+"</a></div>"
+            	doneLine +=			"</div> </div> </div> </div>"
+						}
+						
+					};
+					
+          $(todoLine).appendTo(ToDo);
+          $(doingLine).appendTo(Doing);
+          $(doneLine).appendTo(Done);
+          
+          deleDo();
+          detailDoUserLi();
+          ModifyDoLi();
+				}	else {
+					ToDo.html('');
+					Doing.html('');
+					Done.html('');
+				};
+				
+				
+			});
+			
+			//지운다 Do
+			function deleDo() {
+			$('.delDo').on('click',	function(e) {
+				e.preventDefault();
+				var push = $(this).attr('value');
+				socket.emit('DoDelete', {
+					sprint_back_log_no : push
+				});
+				
+				/** 모든곳에 새로고침을 달아야함 추가 / 수정 / 삭제 */
+				$('.HereToToDo').html('');
+					todoLi();
+				});
+			};
+			
+			//유저스토리 디테일 
+			function detailDoUserLi() {
+				$('.detailDo').on('click', function(e){
+					var push = $(this).attr('value');
+					socket.emit('DoDetail', {
+						sprint_back_log_no : push
+					});
+				});
+			};
+			
+			//유저스토리 불러서 넣기
+			var Do_UserStory;
+			var Do_Worker;
+			socket.on('DoDetail', function (data){
+				var da = data.data[0];
+				Do_UserStory = da.user_story_no;
+				Do_Worker = da.user_no;
+				if(da.status == 0){
+					$('.detailBackLogStatus').val('ToDo');
+				} else if(da.status == 1){
+					$('.detailBackLogStatus').val('Doing');
+				} else if(da.status == 2){
+					$('.detailBackLogStatus').val('Done');
+				}
+				$('.detailDoContent').val(da.content);
+				$('.detailUserPriority').val(da.priority);
+				$('.detailBackLogNo').val(da.sprint_back_log_no);
+				$('.detailstatus').val(da.status);
+				DoDetail_UserStory();
+				DoDetail_Worker();
+				DoModify_Change();
+			});
+			//DoDetail_UserStory 불러오기
+			function DoDetail_UserStory(){
+				socket.emit('DoDetail_UserStory', {
+					user_story_no : Do_UserStory
+				});
+				Do_UserStory = '';
+			};
+			//DoDetail_UserStory 명 부르기
+			socket.on('DoDetail_UserStory', function (data) {
+				var da = data.data[0];
+				$('.detailDoUser').val(da.title);
+			});
+			
+			//DoDetail_Worker 불러오기
+			function DoDetail_Worker(){
+				socket.emit('DoDetail_Worker', {
+					user_no : Do_Worker
+				});
+				Do_Worker = '';
+			};
+			//DoDetail_UserStory 명 부르기
+			socket.on('DoDetail_Worker', function (data) {
+				var da = data.data[0];
+				$('.detailDoWorker').val(da.name);
+			});
+			//디테일 끝
+			
+			//Do 수정-------------------------------------------------------
+			function ModifyDoLi() {
+				$('.ModifyDo').on('click', function(e){
+					var push = $(this).attr('value');
+					socket.emit('DoModifyLoad', {
+						sprint_back_log_no : push
+					});
+				});
+			};
+			
+			//Do 불러서 넣기
+			socket.on('DoModifyLoad', function (data){
+				var da = data.data[0];
+				$('#sprint_no').val(da.sprint_back_log_no);
+				$('#DoModifyUser').val(da.user_story_no);
+				$('#DoContent').val(da.content);
+				$('#DoStatus').val(da.status);
+				$('#DoModifyWorker').val(da.user_no);
+			});
+			
+			//수정 끝------------------------------------------------
+			//버튼으로 단계 설정
+			function DoModify_Change(){ 
+				$('.ThrowOut').on('click', function(){
+					if($('.detailstatus').val() != 2){
+						if($('.detailstatus').val() == 0){
+							var statusSet = 1;
+						} else if($('.detailstatus').val()==1){
+							var statusSet = 2;
+						}
+						socket.emit('ThrowOut', {
+							sprint_back_log_no : $('.detailBackLogNo').val(),
+							status : statusSet
+						});
+						$(detailTodoModal).modal('hide');
+						/** 태스크 새로고침 */
+						todoLi();
+					} else {
+						swal('이미 최상층입니다.');
+					};
+				});
+				
+				$('.ThrowBack').on('click', function(){
+					if($('.detailstatus').val() != 0){
+						if($('.detailstatus').val() == 1){
+							var statusSet = 0;
+						} else if($('.detailstatus').val()==2){
+							var statusSet = 1;
+						}
+						socket.emit('ThrowOut', {
+							sprint_back_log_no : $('.detailBackLogNo').val(),
+							status : statusSet
+						});
+						$(detailTodoModal).modal('hide');
+						/** 태스크 새로고침 */
+						todoLi();
+					} else {
+						swal('이미 최하층입니다.');
+					};
+				});
+				
+			};
+			
+			//탭 변경------------------------------------------------
+			todoLi();
+</script>

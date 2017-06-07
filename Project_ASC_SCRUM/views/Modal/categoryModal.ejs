@@ -1,0 +1,189 @@
+<!-- Modal -->
+<div id="categoryModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header"
+        style="background: #354555; color: #ffffff;">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" style="font-weight: bolder;">카테고리</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-5 col-xs-offset-2">
+            <input type="text" id='text' maxlength='9' style="width : 100%; font-size: 20px;">
+          </div>
+          <div class="col-xs-2 col-xs-offset-1">
+            <button type="button" class="btn btn-danger addCategory"
+              style="width: 100%; font-size: 15px; font-weight: bold;">추가</button>
+          </div>
+        </div>
+        <br>
+				
+        <div class="row" id='AllCategory' data-role='listView' data-inset='true'>
+        
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <div class="row">
+          <div class="col-xs-2 col-xs-offset-9">
+            <button type="button" class="btn btn-default closeCate"
+              data-dismiss="modal"
+              style="width: 100%; font-size: 15px; font-weight: bold; background-color: #333; color: #ffffff;">확인</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+	//SOCKET Open
+	var socket = io.connect();
+	//카테고리 모달
+		
+	//불러 온다 카테고리
+	function categoryLi() {
+		//var cookieName = '${cookie.name.value}';
+		//cookieName = decodeURIComponent(cookieName);
+		//var user = cookieName;
+		$('#AllCategory').html('');
+		socket.emit('categoryList', {
+			scrum_no : <%=scrum_no%>
+		});
+	};
+			
+	//불러서 넣는다 카테고리
+	socket.on('cateList', function (data){
+		$('#AllCategory').html('');
+		var text = $('#AllCategory');
+		var line = '';
+		//전체 조회 후 받은 데이터
+		var da = data.data;
+		
+		if(da.length > 0){
+			for(var i = 0; i < da.length; i++){
+				line += "<div class='col-xs-4'>"
+       	line +=   "<div class='panel panel-gray' style='margin-left: 20px; margin-right: 10px;'>"
+       	line +=     "<div class='panel-heading'>"
+       	line +=       "<div class='row'>"
+       	line +=         "<div class='col-xs-6 text-left'>"
+       	line +=           "<div class='content'>"
+       	line +=             "<a class='fa fa-pencil editCate' ></a>"
+       	line +=           "</div> </div>"
+       	line +=         "<div class='col-xs-6 text-right'>"
+       	line +=           "<div class='content'>"
+       	line +=             "<a class='fa fa-trash-o delCate' value="+ da[i].category_no +"></a>"
+       	line +=           "</div> </div>"
+       	line +=         "<div class='col-xs-10 col-xs-offset-1 text-center noPadding'>"
+       	line +=           "<div class='content text-center noPadding'>"
+       	line +=           "<input type='text' id='"+da[i].category_no+"' maxlength='9' class='col-xs-12 text-center noPadding'"
+       	line +=						" style='background-color:transparent; border:none; height:27px;' disabled value='"+da[i].title+"'></div>"
+       	line +=         "</div> </div> </div> </div> </div>"
+			};
+					
+      $(line).appendTo(text);
+      editCate();
+      deleCate();
+		};
+	});
+		
+	function editCate() { 
+		//설정 한다 수정!!
+		$('.editCate').on('click', function(e) {
+			e.preventDefault();
+				
+			//설정
+			var push = $(this).attr('value');
+			$(this).removeClass('editCate');
+			$(this).removeClass('fa-pencil');
+				
+			//재설정
+			$(this).addClass('fa-check');
+			$(this).addClass('editingCate');
+				
+			//글을 쓴다
+			var text = $(this).parent().parent().next().next().children().children();
+				
+			//채팅 속성 설정
+			text.removeAttr('disabled');
+			text.removeAttr('style');
+			text.attr('style', 'background-color:white');
+			text.attr('style', 'border:none');
+			text.attr('style', 'height:27px');
+				
+			//설정 한다.
+			editingCate();
+		});
+	};
+		
+	function editingCate() {
+		//확정 한다 수정!!
+		$('.editingCate').on('click', function() {
+			//좌측 구간
+			$(this).removeClass('editingCate');
+			$(this).removeClass('fa-check');
+				
+			//글을 쓴다
+			var text = $(this).parent().parent().next().next().children().children();
+			var no = $(text).attr('id');
+			var title;
+				
+			//수정수정
+			socket.emit('categoryEdit', {
+				title : text.val(),
+				category_no : no
+			});
+				
+			/** 모든곳에 새로고침을 달아야함 추가 / 수정 / 삭제 */
+			$('#AllCategory').html('');
+			categoryLi();
+		});
+	};
+		
+	//등록 한다 카테고리
+	$('.addCategory').on('click', function(){
+		var text = $('#text');
+		var title;
+		socket.emit('categoryAdd', {
+			scrum_no : <%=scrum_no%>,
+			project_release_no : <%=project_release_no%>,
+			title : text.val()
+		});
+		text.val('');
+		/** 모든곳에 새로고침을 달아야함 추가 / 수정 / 삭제 */
+		$('#AllCategory').html('');
+		categoryLi();
+	});
+		
+	//지운다 카테고리
+	function deleCate() {
+		$('.delCate').on('click',	function(e) {
+			e.preventDefault();
+			var push = $(this).attr('value');
+			
+			socket.emit('categoryDelete', {
+				category_no : push
+			});
+			
+			/** 모든곳에 새로고침을 달아야함 추가 / 수정 / 삭제 */
+			$('#AllCategory').html('');
+			categoryLi();
+		});
+	};
+	
+		//카테고리 모달 닫기
+		function closeCate(){
+			$('.closeCate').on('click', function(e) {
+				$('#text').val('');
+				location.reload();
+			});
+		};
+		
+		//설정한다 초기세팅
+		categoryLi();
+		closeCate();
+</script>
