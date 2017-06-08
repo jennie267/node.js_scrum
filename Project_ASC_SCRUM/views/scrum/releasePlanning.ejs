@@ -75,8 +75,8 @@
 						if(categoryData[index].category_no == storyData[ind].category_no){%>
 								<tr>
 									<td class='pokerToDo'>
-										<%if(false){%><a class='DetailPoker' value=<%=storyData[ind].user_story_no%> data-toggle="modal" data-target="#planningPokerModal">
-										<%} else if(true){%><a class='DetailPokerMaster' value=<%=storyData[ind].user_story_no%> data-toggle="modal" data-target="#planningPokerMasterModal"><%}%>							
+										<%if(masterId == loginId){%><a class='DetailPoker' value=<%=storyData[ind].user_story_no%> data-toggle="modal" data-target="#planningPokerModal">
+										<%} else if(masterId != loginId){%><a class='DetailPokerMaster' value=<%=storyData[ind].user_story_no%> data-toggle="modal" data-target="#planningPokerMasterModal"><%}%>							
 										<%=storyData[ind].title%></a>
 									</td>
 								</tr class='UserStoryHere'>
