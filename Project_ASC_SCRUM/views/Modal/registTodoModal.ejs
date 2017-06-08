@@ -129,11 +129,12 @@
 				sprint_no : <%=Max%>,
 				user_story_no : $('.DouserStory').val(),
 				user_no : $('.registWorker').val(),
-				content : $('.registContent').val(),
+				content : $('.registContent').val()
 			});
-			$('.registContent').val('');
-			
 			$(registTodoModal).modal('hide');
+			user_story_no : $('.DouserStory').val('');
+				user_no : $('.registWorker').val('');
+			$('.registContent').val('');
 			/** 태스크 새로고침 */
 			todoLi();
 		});

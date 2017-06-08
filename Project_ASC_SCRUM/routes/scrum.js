@@ -18,27 +18,32 @@ exports.taskboard = function(request, response){
 				,function (error2, sprintResults){
 				client.query('select max(sprint_no) as max from sprint where scrum_no = ?', scrum[0].scrum_no
 					,function (error3, sprintmax){
-					if(request.params.sprint_no == 0){
-						response.render('scrum/taskBoard', {
-							project_list_no : request.params.project_list_no,
-							project_release_no : release[0].project_release_no,
-							scrum_no : scrum[0].scrum_no,
-							sprintData : sprintResults,
-							maxsprint : sprintmax[0].max,
-							currentsprint : 0,
-							Max : sprintmax[0].max
-						});
-					} else {
-						response.render('scrum/taskBoard', {
-							project_list_no : request.params.project_list_no,
-							project_release_no : release[0].project_release_no,
-							scrum_no : scrum[0].scrum_no,
-							sprintData : sprintResults,
-							maxsprint : 0,
-							currentsprint : request.params.sprint_no,
-							Max : sprintmax[0].max
-						});
-					}
+					client.query('select * from category where scrum_no = ?', scrum[0].scrum_no
+						,function (error4, category){
+						if(request.params.sprint_no == 0){
+							response.render('scrum/taskBoard', {
+								project_list_no : request.params.project_list_no,
+								project_release_no : release[0].project_release_no,
+								scrum_no : scrum[0].scrum_no,
+								sprintData : sprintResults,
+								maxsprint : sprintmax[0].max,
+								currentsprint : 0,
+								Max : sprintmax[0].max,
+								category : category
+							});
+						} else {
+							response.render('scrum/taskBoard', {
+								project_list_no : request.params.project_list_no,
+								project_release_no : release[0].project_release_no,
+								scrum_no : scrum[0].scrum_no,
+								sprintData : sprintResults,
+								maxsprint : 0,
+								currentsprint : request.params.sprint_no,
+								Max : sprintmax[0].max,
+								category : category
+							});
+						}
+					});
 				});
 			});
 		});

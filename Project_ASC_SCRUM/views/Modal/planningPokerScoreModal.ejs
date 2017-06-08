@@ -1,0 +1,78 @@
+<!-- Modal -->
+<div id="sprintDateModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header"
+        style="background: #354555; color: #ffffff;">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" style="font-weight: bolder;">스프린트 기간</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-2 col-xs-offset-1">
+          <input type='text' class='col-xs-12 text-center noPadding'
+            style='background-color:transparent; border:none; width: 100%; font-weight: bold; font-size: 17px;'
+            disabled value='시작날짜'>
+          </div>
+          <div class="col-xs-8">
+          <input type='text' class='col-xs-12 text-center' id='start_date'
+            style='background-color:transparent; border:none; width: 100%; font-weight: bold; font-size: 17px;'
+            disabled value=''>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-2 col-xs-offset-1">
+          <input type='text' class='col-xs-12 text-center' id='start_date'
+            style='background-color:transparent; border:none; width: 100%; font-weight: bold; font-size: 17px;'
+            disabled value='종료날짜'>
+          </div>
+          <div class="col-xs-8">
+          <input type='text' class='col-xs-12 text-center' id='end_date'
+            style='background-color:transparent; border:none; width: 100%; font-weight: bold; font-size: 17px;'
+            disabled value=''>
+          </div>
+        </div>
+          
+      </div>
+      <div class="modal-footer">
+        <div class="row">
+          <div class="col-xs-2 col-xs-offset-5">
+            <button type="button" class="btn btn-default" data-dismiss="modal"
+              style="width: 100%; font-size: 15px; font-weight: bold;  color: #333;">확인</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+	//SOCKET Open
+	var socket = io.connect();
+	//스프린트모달
+	//선택된 스프린트 호출
+	function sprintDetail() {
+		//var cookieName = '${cookie.name.value}';
+		//cookieName = decodeURIComponent(cookieName);
+		//var user = cookieName;
+		if($('.maxSprint').val() > 0){
+			var sprint_no = $('.maxSprint').val();
+		} else {
+			var sprint_no = $('.currentSprint').val();
+		}
+		socket.emit('sprintDetail', {
+			sprint_no : sprint_no
+		});
+	};
+	//스프린트 정보
+	socket.on('sprintDetail', function (data){
+		var da = data.sprint;
+		$('#start_date').val(da[0].start_date.substr(0,10));
+		$('#end_date').val(da[0].end_date.substr(0,10));
+	});		
+	
+	sprintDetail();
+</script>
