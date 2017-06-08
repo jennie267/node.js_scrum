@@ -147,22 +147,28 @@
 		//수정 시작합니다 ----------------------------------------
 		function DoModify_Comp(){ 
 		$('.DoModifyComp').on('click', function(){
-			socket.emit('DoModify', {
-				sprint_back_log_no : $('#sprint_no').val(),
-				user_story_no : $('#DoModifyUser').val(),
-				user_no : $('#DoModifyWorker').val(),
-				content : $('#DoContent').val(),
-				status : $('#DoStatus').val()
-			});
-			$(modifyTodoModal).modal('hide');
-			$('#sprint_no').val('');
-			$('#DoModifyUser').val('');
-			$('#DoModifyWorker').val('');
-			$('#DoContent').val('');
-			$('#DoStatus').val('');
-			/** 태스크 새로고침 */
-			todoLi();
-			});
+			var content = $('#DoContent').val();
+			
+			if(content.trim().length > 0){
+				socket.emit('DoModify', {
+					sprint_back_log_no : $('#sprint_no').val(),
+					user_story_no : $('#DoModifyUser').val(),
+					user_no : $('#DoModifyWorker').val(),
+					content : content,
+					status : $('#DoStatus').val()
+				});
+				$(modifyTodoModal).modal('hide');
+				$('#sprint_no').val('');
+				$('#DoModifyUser').val('');
+				$('#DoModifyWorker').val('');
+				$('#DoContent').val('');
+				$('#DoStatus').val('');
+				/** 태스크 새로고침 */
+				todoLi();
+			}else {
+				swal('빈칸을 모두 채워주세요')
+			}	
+		});
 		}
 		
 		//초기 셋팅

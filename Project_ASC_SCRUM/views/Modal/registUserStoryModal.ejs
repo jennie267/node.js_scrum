@@ -97,23 +97,32 @@
 	//유저스토리 등록 모달
 	//등록 한다 유저스토리
 	$('.addStory').on('click', function(){
-		socket.emit('StoryAdd', {
-			project_release_no : <%=project_release_no%>,
-			category_no : $('#categoryList').val(),
-			title : $('#title').val(),
-			as_a : $('#AsA').val(),
-			i_want : $('#IWant').val(),
-			so_that : $('#SoThat').val(),
-			priority : $('#Priority').val()
-		});
-		$(registUserStoryModal).modal('hide');
-		$('#categoryList').val('');
-		$('#title').val('');
-		$('#AsA').val('');
-		$('#IWant').val('');
-		$('#SoThat').val('');
-		$('#Priority').val('');
-		/** 태스크 새로고침 */
-		StoryLi();
+		var title = $('#title').val();
+		var as_a = $('#AsA').val();
+		var i_want = $('#IWant').val();
+		var so_that = $('#SoThat').val();
+		
+		if(title.trim().length > 0 && as_a.trim().length > 0 && i_want.trim().length > 0 && so_that.trim().length >0){
+			socket.emit('StoryAdd', {
+				project_release_no : <%=project_release_no%>,
+				category_no : $('#categoryList').val(),
+				title : title,
+				as_a : as_a,
+				i_want : i_want,
+				so_that : so_that,
+				priority : $('#Priority').val()
+			});
+			$(registUserStoryModal).modal('hide');
+			$('#categoryList').val('');
+			$('#title').val('');
+			$('#AsA').val('');
+			$('#IWant').val('');
+			$('#SoThat').val('');
+			$('#Priority').val('');
+			/** 태스크 새로고침 */
+			StoryLi();
+		}else {
+				swal('빈칸을 모두 채워주세요')
+		}
 	});
 </script>

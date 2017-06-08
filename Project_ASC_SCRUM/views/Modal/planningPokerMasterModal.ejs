@@ -9,6 +9,8 @@
         <h4 class="modal-title" style="font-weight: bolder;">Planning Poker</h4>
         <input type='hidden' class='PokerStory' value=''>
         <input type='hidden' class='PokerUser' value='<%=loginId%>'>
+        <input type='hidden' class='VotePeople' value=''>
+        <input type='hidden' class='AllPeople' value=''>
       </div>
       <div class="modal-body">
       <br>
@@ -92,15 +94,18 @@
 	var socket = io.connect();
 	//마스터용 포커
 	$('.SetScore').on('click', function (e){
-		socket.emit('StorySetScore', {
-			user_story_no : $('.PokerStory').val(),
-			working_time : $('.ScoreAdd').val()
-		});
-		$('.PokerStory').val('');
-		$('.ScoreAdd').val('');
-		$(planningPokerMasterModal).modal('hide');
+		if($('.VotePeople').val() == $('.AllPeople').val()){
+			socket.emit('StorySetScore', {
+				user_story_no : $('.PokerStory').val(),
+				working_time : $('.ScoreAdd').val()
+			});
+			$('.PokerStory').val('');
+			$('.ScoreAdd').val('');
+			$(planningPokerMasterModal).modal('hide');
+		} else {
+			swal('모두가 투표를 진행 하지 않았어요')
+		}	
 	});
-	
 	$('.ScoreModal').on('click', function(e){
 			var push = $('.PokerStory').val();
 			//Poker 정보 호출
