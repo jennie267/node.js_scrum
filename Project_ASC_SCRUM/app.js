@@ -5,18 +5,13 @@ var express = require('express')
  , session = require('express-session')
  , path = require('path')
  , favicon = require('serve-favicon')
- , logger = require('morgan')
  , cookieParser = require('cookie-parser')
  , bodyParser = require('body-parser')
  , mysql = require('mysql')
  , http = require('http')
- , ejs = require('ejs')
  , app = express()
  , server = http.createServer(app)
  , io = require('socket.io')(server)
- , sassMiddleware = require('node-sass-middleware')
- , fs = require("fs")
- , readline = require("readline")
  , scrum = require('./routes/scrum.js');
 
 
