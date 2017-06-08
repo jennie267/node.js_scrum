@@ -14,7 +14,9 @@ exports.taskboard = function(request, response){
 	,function (error0, scrum){
 		client.query('select project_release_no from project_release where project_list_no = ?', [request.params.project_list_no]
 			,function (error1, release){
-			client.query('select * from sprint where scrum_no = ?', scrum[0].scrum_no
+			client.query('select * from user_story where project_release_no = ?', release[0].project_release_no 
+				,function (error, storyResult){
+				client.query('select * from sprint where scrum_no = ?', scrum[0].scrum_no
 				,function (error2, sprintResults){
 				client.query('select max(sprint_no) as max from sprint where scrum_no = ?', scrum[0].scrum_no
 					,function (error3, sprintmax){
@@ -27,6 +29,7 @@ exports.taskboard = function(request, response){
 									project_list_no : request.params.project_list_no,
 									project_release_no : release[0].project_release_no,
 									scrum_no : scrum[0].scrum_no,
+									storyData : storyResult,
 									sprintData : sprintResults,
 									maxsprint : sprintmax[0].max,
 									currentsprint : 0,
@@ -40,6 +43,7 @@ exports.taskboard = function(request, response){
 									project_list_no : request.params.project_list_no,
 									project_release_no : release[0].project_release_no,
 									scrum_no : scrum[0].scrum_no,
+									storyData : storyResult,
 									sprintData : sprintResults,
 									maxsprint : 0,
 									currentsprint : request.params.sprint_no,
@@ -53,6 +57,7 @@ exports.taskboard = function(request, response){
 					});
 				});
 			});
+			});	
 		});
 	});
 };
