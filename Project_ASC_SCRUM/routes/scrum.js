@@ -29,7 +29,8 @@ exports.taskboard = function(request, response){
 								maxsprint : sprintmax[0].max,
 								currentsprint : 0,
 								Max : sprintmax[0].max,
-								category : category
+								category : category,
+								loginId : request.params.loginId
 							});
 						} else {
 							response.render('scrum/taskBoard', {
@@ -40,7 +41,8 @@ exports.taskboard = function(request, response){
 								maxsprint : 0,
 								currentsprint : request.params.sprint_no,
 								Max : sprintmax[0].max,
-								category : category
+								category : category,
+								loginId : request.params.loginId
 							});
 						}
 					});
@@ -69,7 +71,8 @@ exports.releasePlanning = function(request, response){
 									scrum_no : scrum[0].scrum_no,
 									storyData : storyResult,
 									categoryData : categoryResult,
-									masterId : masterId[0].user_no 
+									masterId : masterId[0].user_no,
+									loginId : request.params.loginId
 								});
 							});
 					});

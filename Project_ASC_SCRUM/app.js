@@ -31,8 +31,8 @@ app.use(bodyParser.urlencoded({ extended : false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname,'public')));
 
-app.get('/taskboard/:project_list_no/:sprint_no', scrum.taskboard);
-app.get('/releasePlanning/:project_list_no', scrum.releasePlanning);
+app.get('/taskboard/:project_list_no/:sprint_no/:loginId', scrum.taskboard);
+app.get('/releasePlanning/:project_list_no/:loginId', scrum.releasePlanning);
 
 io.sockets.on('connection', function (socket){
 	/** 스크럼 */
