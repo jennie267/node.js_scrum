@@ -21,10 +21,7 @@
 			socket.emit('StoryDetail', {
 				user_story_no : push
 			});
-			//Poker 정보 호출
-			socket.emit('PokerDetail', {
-				user_story_no : push
-			});
+			
 			//join_list 정보 호출
 			socket.emit('Join_List', {
 				project_join_no : <%=project_join_no%>,
@@ -47,9 +44,7 @@
 		textfield.html(text);
 	});
 	//포커 정보 부르기
-	socket.on('PokerDetail', function (data){
-		var da = data.data[0];
-	});
+	
 	//포커 관련 모든 인원수 및 점수 부르기
 	socket.on('Join_List', function (data){
 		var count = data.count[0].count;

@@ -278,11 +278,21 @@ io.sockets.on('connection', function (socket){
 	//포커 정보
 	socket.on('PokerDetail', function (data){
 		client.query('select * from poker where user_story_no = ?'
-				, data.user_story_no, function (error, results){
-					io.sockets.emit('PokerDetail', {
-						data : results
+				, data.user_story_no, function (error0, poker){
+				client.query('select project_join_no from project_list where project_list_no = ?',[data.project_list_no]
+					, function (error1, join){
+					client.query('select user_no from project_join_list where project_join_no = ? and status = 0',[join[0].project_join_no]
+						,function (error2, user){
+						client.query('select * from users', function (error3, list){	
+							io.sockets.emit('PokerDetail', {
+								poker : poker,
+								user : user,
+								list : list
+							});
 					});
 				});
+			});
+		});
 	});
 	//Poker Fin
 	//Project_Join_List Srt
