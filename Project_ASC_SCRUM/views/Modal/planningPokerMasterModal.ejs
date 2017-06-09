@@ -103,7 +103,11 @@
 			$('.ScoreAdd').val('');
 			$(planningPokerMasterModal).modal('hide');
 		} else {
-			swal('모두가 투표를 진행 하지 않았어요')
+			swal({     
+				title: '투표가 진행중입니다.',
+        type: 'warning',
+        confirmButtonText: '닫기'
+      })
 		}	
 	});
 	$('.ScoreModal').on('click', function(e){

@@ -1,4 +1,3 @@
-
 /*
  * GET users listing.
  */
@@ -11,7 +10,7 @@ var client = mysql.createConnection({
 
 exports.taskboard = function(request, response){
 	client.query('select scrum_no from scrum where project_list_no = ?', [request.params.project_list_no]
-	,function (error0, scrum){
+		,function (error0, scrum){
 		client.query('select project_release_no from project_release where project_list_no = ?', [request.params.project_list_no]
 			,function (error1, release){
 			client.query('select * from user_story where project_release_no = ?', release[0].project_release_no 
@@ -63,7 +62,7 @@ exports.taskboard = function(request, response){
 };
 exports.releasePlanning = function(request, response){
 	client.query('select project_join_no from project_list where project_list_no = ?',[request.params.project_list_no]
-	, function (error0, join){
+		, function (error0, join){
 		client.query('select user_no from project_join_list where project_join_no = ?',[join[0].project_join_no]
 			,function (errors, masterId){
 			client.query('select scrum_no from scrum where project_list_no = ?', [request.params.project_list_no]

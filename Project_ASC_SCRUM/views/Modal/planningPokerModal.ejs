@@ -91,7 +91,11 @@ console.log(<%=loginId%>);
 				callFind();
 				});
 			} else {
-				swal('빈칸을 모두 채워주세요');
+				swal({     
+					title: '점수를 입력해주세요.',
+        	type: 'warning',
+        	confirmButtonText: '닫기'
+      	})
 				$('.inputScore').val('');
 				check = 0 ;
 			}
@@ -112,7 +116,11 @@ console.log(<%=loginId%>);
 			check = 0;
 			location.reload();
 		} else {
-				swal('이미 투표 하셨어요');
+				swal({     
+					title: '투표가 완료되었습니다.',
+        	type: 'warning',
+        	confirmButtonText: '닫기'
+      	})
 				$('.inputScore').val('');
 				check = 0;
 			}
