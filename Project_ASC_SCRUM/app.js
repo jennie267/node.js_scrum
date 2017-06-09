@@ -294,6 +294,15 @@ io.sockets.on('connection', function (socket){
 			});
 		});
 	});
+	//포커 조회
+	socket.on('PokerFind', function (data){
+		client.query('select * from poker where user_story_no = ? and user_no = ?', [data.user_story_no, data.user_no]
+			,function (error, poker){
+			io.sockets.emit('PokerFind', {
+				FindPoker : poker
+			});
+		});
+	});
 	//Poker Fin
 	//Project_Join_List Srt
 	//참가 목록

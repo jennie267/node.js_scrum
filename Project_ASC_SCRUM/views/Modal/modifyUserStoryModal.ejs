@@ -103,6 +103,7 @@
 			var so_that = $('.ModifyStorySo_That').val();
 			
 			if(title.trim().length > 0 && as_a.trim().length > 0 && i_want.trim().length > 0 && so_that.trim().length >0){
+				
 				socket.emit('StoryModify', {
 					project_release_no : <%=project_release_no%>,
 					user_story_no : $('.ModifyStory_No').val(),
@@ -113,6 +114,7 @@
 					so_that : $('.ModifyStorySo_That').val(),
 					priority : $('.ModifyStoryPriority').val()
 				});
+				
 				$(modifyUserStoryModal).modal('hide');
 				$('.ModifyStory_No').val(),
 			

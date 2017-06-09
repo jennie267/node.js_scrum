@@ -74,8 +74,22 @@
 					if(storyData.length > 0){
 						if(categoryData[index].category_no == storyData[ind].category_no){%>
 								<tr>
-									<td class='pokerToDo'>
-										<%if(masterId != loginId){%><a class='DetailPoker' value=<%=storyData[ind].user_story_no%> data-toggle="modal" data-target="#planningPokerModal">
+									<%if(storyData[ind].working_time > 0){%>
+										<td class='pokerAllDone'>
+									<%} else {%>
+										<%if(poker.length > 0){ var check=0;%>
+											<% poker.forEach(function (item,i){%>
+												<% if(poker[i].user_story_no == storyData[ind].user_story_no){check=1;}%>
+											<%});%>
+											<%if(check==1){%>
+												<td class='pokerDone'>
+											<%} else {%>
+												<td class='pokerToDo'>
+											<%}%>
+										<%}%>
+									<%}%>
+										<%if(masterId != loginId){%>
+										<a class='DetailPoker' value=<%=storyData[ind].user_story_no%> data-toggle="modal" data-target="#planningPokerModal">
 										<%} else if(masterId == loginId){%><a class='DetailPokerMaster' value=<%=storyData[ind].user_story_no%> data-toggle="modal" data-target="#planningPokerMasterModal"><%}%>							
 										<%=storyData[ind].title%></a>
 									</td>
@@ -88,7 +102,8 @@
 						
   </div>
 </div>
-
+<script>
+</script>
 <!-- footer -->  
 <% include ../include/footer.ejs%>
 <!-- footer -->

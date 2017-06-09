@@ -37,7 +37,7 @@
             <a class="btn score" value='10' style="width : 100%; font-size: 20px; border-radius: 25px; background-color : #F39C12; font-weight : bold;">10</a>
           </div>
           <div class="col-xs-1">
-            <input type="number" class='inputScore' max='10' min='0.5' step='0.5' style="text-align:center; width : 100%; font-size: 20px; margin-left: 25px;">
+            <input type="number" value='' class='inputScore' max='10' min='0.5' step='0.5' style="text-align:center; width : 100%; font-size: 20px; margin-left: 25px;">
           </div>
         </div>
               
@@ -60,25 +60,61 @@
 </div>
 
 <script>
+console.log(<%=loginId%>);
 	//SOCKET Open
 	var socket = io.connect();
+	var check = 0;
 	//팀원용 포커
 	$('.score').on('click', function (e){
 		var text = $('.inputScore');
 		var score = $(this).attr('value');
 		text.val(score);
 	});
-	
-	$('.savePoker').on('click', function(e){
-		socket.emit('PokerAdd', {
-			user_story_no : $('.PokerStory').val(),
-			user_no : $('.PokerUser').val(),
-			score : $('.inputScore').val()
-		});
-		$('.PokerStory').val('');
-		$('.PokerUser').val('');
-		$('.inputScore').val('');
-		$(planningPokerModal).modal('hide');
-		location.reload();
-	});
+		save();
+	function save(){		
+		$('.savePoker').on('click', function(e){
+			var scoreSet = $('.inputScore').val();
+			if(scoreSet.trim().length > 0){
+				socket.emit('PokerFind', {
+					user_story_no : $('.PokerStory').val(),
+					user_no : $('.PokerUser').val(),
+				});
+		
+				socket.on('PokerFind', function (data){
+					var da = data.FindPoker;
+					console.log(da.length);
+					if(da.length > 0){
+						check = 0;
+					} else {
+						check = 1;
+					};
+				callFind();
+				});
+			} else {
+				swal('빈칸을 모두 채워주세요');
+				$('.inputScore').val('');
+				check = 0 ;
+			}
+		});	
+	}
+	function callFind(){	
+		if(check == 1){
+			socket.emit('PokerAdd', {
+				user_story_no : $('.PokerStory').val(),
+				user_no : $('.PokerUser').val(),
+				score : $('.inputScore').val()
+			});
+		
+			$('.PokerStory').val('');
+			$('.PokerUser').val('');
+			$('.inputScore').val('');
+			$(planningPokerModal).modal('hide');
+			check = 0;
+			location.reload();
+		} else {
+				swal('이미 투표 하셨어요');
+				$('.inputScore').val('');
+				check = 0;
+			}
+	};
 </script>
