@@ -1,7 +1,10 @@
 <script>
 //SOCKET Open
-		var socket = io.connect();
-	
+		var socket = io();
+		var project_room0 = <%=project_list_no%>;
+		var project_room1 = <%=project_list_no%> + '/' + <%=maxsprint%>;
+		socket.connect(project_room0);
+		socket.emit("join0", project_room0);
 		//Category 영역 ->> Srt
 		<% include ../include/categoryScript.ejs %>
 		//Category 영역 <<- Fin
@@ -9,14 +12,20 @@
 		//UserStory 영역 ->> Srt
 		<% include ../include/userStoryScript.ejs %>
 		//UserStory 영역 <<- Fin
+				socket.connect(project_room1);
+				socket.emit('join1', <%=project_list_no%>,<%=maxsprint%>);
 	
 		//ToDo 영역 ->> Srt
-		<% include ../include/toDoScript.ejs %>
+				<% include ../include/toDoScript.ejs %>
 		//ToDo 영역 <<- Fin
 		
 		//Sprint 영역  ->> Srt
-		<% include ../include/sprintScript.ejs %>
+		//<% include ../include/sprintScript.ejs %>
 		//Sprint 영역 <<- Fin
+		
+
+		
+		
 	
 	
 	

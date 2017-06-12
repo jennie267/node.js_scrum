@@ -65,33 +65,30 @@
 
 	<!-- 포커 관련 정보를 띄운다!! -->
   <div class='PlanningHere' style="display: flex; overflow-x: auto; overflow-y:hidden; white-space: nowrap; padding-bottom: 3%;">
-		<% categoryData.forEach(function (item,index){ %>
+		<% categoryData.forEach(function (item0,index){ %>
 			<table>
 				<tr>
-					<th><%=categoryData[index].title%></th>
-				</tr class='CateNum' value='<%=categoryData[index].category_no%>'>
-			<% storyData.forEach(function (item,ind){
-					if(storyData.length > 0){
-						if(categoryData[index].category_no == storyData[ind].category_no){%>
+					<th><%=item0.title%></th>
+				</tr class='CateNum' value='<%=item0.category_no%>'>
+			<% storyData.forEach(function (item1,ind){%>
+					<%if(storyData.length > 0){%>
+						<%if(item0.category_no == item1.category_no){%>
 								<tr>
-									<%if(storyData[ind].working_time > 0){%>
+									<%if(item1.working_time > 0){%>
 										<td class='pokerAllDone'>
 									<%} else {%>
 										<%if(poker.length > 0){ var check=0;%>
-											<% poker.forEach(function (item,i){%>
-												<% if(poker[i].user_story_no == storyData[ind].user_story_no){check=1;}%>
+											<% poker.forEach(function (item2,i){%>
+												<% if(item2.user_story_no == item1.user_story_no){check=1;}%>
 											<%});%>
-											<%if(check==1){%>
-												<td class='pokerDone'>
-											<%} else {%>
-												<td class='pokerToDo'>
-											<%}%>
+											<%if(check==1){%><td class='pokerDone'>
+											<%} else {%><td class='pokerToDo'><%}%>
 										<%}%>
 									<%}%>
 										<%if(masterId != loginId){%>
-										<a class='DetailPoker' value=<%=storyData[ind].user_story_no%> data-toggle="modal" data-target="#planningPokerModal">
-										<%} else if(masterId == loginId){%><a class='DetailPokerMaster' value=<%=storyData[ind].user_story_no%> data-toggle="modal" data-target="#planningPokerMasterModal"><%}%>							
-										<%=storyData[ind].title%></a>
+										<a class='DetailPoker' value=<%=item1.user_story_no%> data-toggle="modal" data-target="#planningPokerModal">
+										<%} else if(masterId == loginId){%><a class='DetailPokerMaster' value=<%=item1.user_story_no%> data-toggle="modal" data-target="#planningPokerMasterModal"><%}%>							
+										<%=item1.title%></a>
 									</td>
 								</tr class='UserStoryHere'>
 						<%}

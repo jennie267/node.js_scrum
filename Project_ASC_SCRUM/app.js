@@ -34,7 +34,35 @@ app.use(express.static(path.join(__dirname,'public')));
 app.get('/taskboard/:project_list_no/:sprint_no/:loginId', scrum.taskboard);
 app.get('/releasePlanning/:project_list_no/:loginId', scrum.releasePlanning);
 
+var rooms = {};
+var project_room0;
+var project_room1;
+
 io.sockets.on('connection', function (socket){
+
+	socket.on('join0', function(project_list_no){
+		socket.project_list_no = project_list_no;
+		
+		project_room0 = project_list_no;
+		
+		socket.join(socket.project_list_no);
+		console.log(io.sockets.adapter.rooms);
+	});
+	socket.on('join1', function(project_list_no, sprint_no){
+		socket.sprint_no = sprint_no;
+		
+		project_room1 = socket.project_list_no+'/'+sprint_no;
+		
+		socket.join(socket.project_list_no+'/'+socket.sprint_no);
+		console.log(io.sockets.adapter.rooms);
+	});
+	
+	socket.on('disconnect',function(){
+		socket.leave(socket.project_list_no);
+		socket.leave(socket.project_list_no+'/'+socket.sprint_no);
+	});
+	
+	
 	/** 스크럼 */
 	//Sprint Srt
 	//스프린트 추가 및 그전 스프린트 종료
@@ -68,12 +96,13 @@ io.sockets.on('connection', function (socket){
 	
 	//Category Srt ->> 전용
 	//카테고리  리스트
+	
 	socket.on('categoryList', function (data){
 		client.query('select * from category where scrum_no = ?', data.scrum_no 
 			,function (error, results){
-			socket.emit('categoryList', {
+			io.sockets.in(project_room0).emit('categoryList', {
 				data : results
-			});
+		    });
 		});
 	});
 	//카테고리 추가
@@ -99,9 +128,9 @@ io.sockets.on('connection', function (socket){
 	socket.on('StoryList', function (data){
 		client.query('select * from user_story where project_release_no = ?', data.project_release_no 
 			,function (error, results){
-				socket.emit('StoryList', {
+				io.sockets.in(project_room0).emit('StoryList', {
 					data : results
-				});
+			    });
 		});
 	});
 	//스토리 추가
@@ -180,9 +209,9 @@ io.sockets.on('connection', function (socket){
 	socket.on('ToDoList', function (data){
 		client.query('select * from sprint_back_log where sprint_no = ?' 
 			,data.sprint_no,	function (error, results){
-			socket.emit('ToDoList', {
+			io.sockets.in(project_room1).emit('ToDoList', {
 				data : results
-			});
+		    });
 		});
 	});
 	//투두등록용 ->> 스토리 정보

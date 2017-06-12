@@ -1,7 +1,11 @@
 <script>
-
+	
 	//SOCKET Open
-	var socket = io.connect();
+	var socket = io();
+	var project_room0 = <%=project_list_no%>;
+	socket.connect(project_room0);
+	socket.emit("join0", project_room0);
+		
 	<% include ../include/categoryScript.ejs %>
 	<!-- /#page-wrapper -->
 	//유저스토리 디테일 
@@ -200,6 +204,7 @@
 			$('.PokerStory').val('');
 			$('.ScoreAdd').val('');
 			$(planningPokerMasterModal).modal('hide');
+			location.reload();
 		} else {
 			swal({     
 				title: '투표가 진행중입니다.',

@@ -69,7 +69,7 @@ exports.releasePlanning = function(request, response){
 				,function (errors, scrum){
 				client.query('select * from category where scrum_no = ?',  scrum[0].scrum_no
 					,function (error, categoryResult){
-					client.query('select project_release_no from project_release where project_list_no', [request.params.project_list_no]
+					client.query('select project_release_no from project_release where project_list_no = ?', [request.params.project_list_no]
 						,function (erro,release){
 						client.query('select * from user_story where project_release_no = ?', release[0].project_release_no 
 							,function (error, storyResult){
@@ -77,6 +77,10 @@ exports.releasePlanning = function(request, response){
 								,function (error, name){			
 								client.query('select * from poker'
 									,function (error, poker){
+										console.log('릴리즈'+release[0].project_release_no);
+										console.log('리스트'+request.params.project_list_no);
+										console.log(storyResult);
+										console.log(categoryResult);
 									response.render('scrum/releasePlanning', {
 										project_list_no : request.params.project_list_no,
 										project_join_no : join[0].project_join_no,
