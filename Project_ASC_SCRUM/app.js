@@ -59,19 +59,19 @@ io.sockets.on('connection', function (socket){
 	socket.on('sprintDetail', function (data){
 		client.query('select * from sprint where sprint_no = ?', data.sprint_no
 			,function (error, results){
-			io.sockets.emit('sprintDetail', {
+			socket.emit('sprintDetail', {
 				sprint : results
 			});
 		});
 	});
 	//Sprint Fin
 	
-	//Category Srt
-	//카테고리 리스트
+	//Category Srt ->> 전용
+	//카테고리  리스트
 	socket.on('categoryList', function (data){
 		client.query('select * from category where scrum_no = ?', data.scrum_no 
 			,function (error, results){
-			io.sockets.emit('cateList', {
+			socket.emit('categoryList', {
 				data : results
 			});
 		});
@@ -92,23 +92,14 @@ io.sockets.on('connection', function (socket){
 		client.query('update category set title = ? where category_no = ?'
 				, [data.title, data.category_no]);
 	});
-	//카테고리 정보
-	socket.on('cateDetail', function (data){
-		client.query('select * from category where category_no = ?'
-				, data.category_no, function (error, results){
-					io.sockets.emit('StoryCate', {
-						data : results
-					});
-				});
-	});
-	//Category Fin
+	//Category Fin ->> 전용
 	
-	//UserStory Srt ->> 스토리
+	//UserStory Srt ->> 전용
 	//스토리 리스트
 	socket.on('StoryList', function (data){
 		client.query('select * from user_story where project_release_no = ?', data.project_release_no 
 			,function (error, results){
-				io.sockets.emit('StoryList', {
+				socket.emit('StoryList', {
 					data : results
 				});
 		});
@@ -150,38 +141,71 @@ io.sockets.on('connection', function (socket){
 			, [data.category_no, data.title, data.as_a, 
 				data.i_want, data.so_that, data.priority, data.user_story_no]);
 	});
-	//투두등록용 ->> 스토리 정보
-	socket.on('DoDetail_UserStory', function (data){
-		client.query('select * from user_story where user_story_no = ?'
-				, data.user_story_no, function (error, results){
-					io.sockets.emit('DoDetail_UserStory', {
+	//카테고리 리스트 ->> 생성용
+	socket.on('StoryCateList', function (data){
+		client.query('select * from category where scrum_no = ?', data.scrum_no 
+				,function (error, results){
+			socket.emit('StoryCateList', {
+				data : results
+			});
+		});
+	});
+	//카테고리 리스트 ->> 수정용
+	socket.on('ModifyStoryCate', function (data){
+		client.query('select * from category where scrum_no = ?', data.scrum_no 
+				,function (error, results){
+			socket.emit('ModifyStoryCate', {
+				data : results
+			});
+		});
+	});
+	//카테고리 정보
+	socket.on('StorycateDetail', function (data){
+		client.query('select * from category where category_no = ?'
+				, data.category_no, function (error, results){
+					io.sockets.emit('StorycateDetail', {
 						data : results
 					});
 				});
-	});
-	//투두수정용 ->> 스토리 정보
-	socket.on('DoModify_UserStory', function (data){
-		client.query('select * from user_story where project_release_no = ?', data.project_release_no 
-				,function (error, results){
-					io.sockets.emit('DoModify_UserStory', {
-						data : results
-					});
-			});
 	});
 	//스토리 시간 등록
 	socket.on('StorySetScore', function (data){
 		client.query('update user_story set working_time = ? where user_story_no = ?'
 				, [data.working_time, data.user_story_no]);
 	});
-	//UserStory Fin
+	//UserStory Fin ->> 전용
 	
-	//Todo Srt
-	//투두 리스트
-	socket.on('todoList', function (data){
+	//ToDo Srt ->> 전용
+	//투두 전체 조회
+	socket.on('ToDoList', function (data){
 		client.query('select * from sprint_back_log where sprint_no = ?' 
 			,data.sprint_no,	function (error, results){
-			io.sockets.emit('todoList', {
+			socket.emit('ToDoList', {
 				data : results
+			});
+		});
+	});
+	//투두등록용 ->> 스토리 정보
+	socket.on('DoStory', function (data){
+		client.query('select * from user_story where project_release_no = ?', data.project_release_no 
+			,function (error, results){
+				socket.emit('DoStory', {
+					data : results
+				});
+		});
+	});
+	//투두등록용 ->> 유저 정보
+	socket.on('DoUserList', function (data){
+		client.query('select project_join_no from project_list where project_list_no = ?',[data.project_list_no]
+			, function (error0, join){
+			client.query('select user_no from project_join_list where project_join_no = ? and status = 0',[join[0].project_join_no]
+				,function (error1, user){
+				client.query('select * from users', function (error2, list){	
+					socket.emit('DoUserList', {
+						list : list,
+						user : user
+					});
+				});
 			});
 		});
 	});
@@ -192,75 +216,32 @@ io.sockets.on('connection', function (socket){
 			,[data.sprint_no, data.user_story_no, data.user_no, 
 			  data.content]);
 	});
-	//투두 삭제
-	socket.on('DoDelete', function (data){
-		client.query(
-		'delete from sprint_back_log where sprint_back_log_no = ?'		
-			, data.sprint_back_log_no);
-	});
-	//투두 정보
-	socket.on('DoDetail', function (data){
-		client.query('select * from sprint_back_log where sprint_back_log_no = ?'
-			, data.sprint_back_log_no, function (error, results){
-				io.sockets.emit('DoDetail', {
-					data : results
-				});
-			});
-	});
 	//투두수정 불러오기
 	socket.on('DoModifyLoad', function (data){
 		client.query('select * from sprint_back_log where sprint_back_log_no = ?'
 				, data.sprint_back_log_no, function (error, results){
-					io.sockets.emit('DoModifyLoad', {
+					socket.emit('DoModifyLoad', {
 						data : results
 					});
 				});
 	});
-	//투두 수정
-	socket.on('DoModify', function (data){
-		client.query('update sprint_back_log set user_story_no = ?, user_no = ?, content = ?, status = ? where sprint_back_log_no = ?'
-			, [data.user_story_no, data.user_no, 
-				data.content, data.status, data.sprint_back_log_no]);
-	});
-	//버튼으로 투두 상태 변경
-	socket.on('ThrowOut', function (data){
-		client.query('update sprint_back_log set status = ? where sprint_back_log_no =?'
-				, [data.status, data.sprint_back_log_no]);
-	});
-	//Todo Fin
-	//User Srt
-	//유저 리스트
-	socket.on('DoUserList', function (data){
-		client.query('select project_join_no from project_list where project_list_no = ?',[data.project_list_no]
-			, function (error0, join){
-			client.query('select user_no from project_join_list where project_join_no = ? and status = 0',[join[0].project_join_no]
-				,function (error1, user){
-				client.query('select * from users', function (error2, list){	
-					io.sockets.emit('DoUser', {
-						list : list,
-						user : user
-					});
+	//투두 수정용 ->> 유저스토리 정보
+	socket.on('DoModifyStory', function (data){
+		client.query('select * from user_story where project_release_no = ?', data.project_release_no 
+			,function (error, results){
+				socket.emit('DoModifyStory', {
+					data : results
 				});
-			});
 		});
 	});
-	//작업자 정보
-	socket.on('DoDetail_Worker', function (data){
-		client.query('select * from users where user_no = ?'
-				, data.user_no, function (error, results){
-			io.sockets.emit('DoDetail_Worker', {
-				data : results
-			});
-		});
-	});
-	//투두수정용 ->> 작업자
+	//투두 수정용 ->> 유저정보
 	socket.on('DoModify_Worker', function (data){
 		client.query('select project_join_no from project_list where project_list_no = ?',[data.project_list_no]
 			, function (error0, join){
 			client.query('select user_no from project_join_list where project_join_no = ? and status = 0',[join[0].project_join_no]
 				,function (error1, user){
 				client.query('select * from users', function (error2, list){	
-					io.sockets.emit('DoModify_Worker', {
+					socket.emit('DoModify_Worker', {
 					list : list,
 					user : user
 					});
@@ -268,7 +249,53 @@ io.sockets.on('connection', function (socket){
 			});
 		});
 	});
-	//User Fin
+	//투두 수정
+	socket.on('DoModify', function (data){
+		client.query('update sprint_back_log set user_story_no = ?, user_no = ?, content = ?, status = ? where sprint_back_log_no = ?'
+				, [data.user_story_no, data.user_no, 
+					data.content, data.status, data.sprint_back_log_no]);
+	});
+	//투두 상세
+	//투두 정보
+	socket.on('ToDoDetail', function (data){
+		client.query('select * from sprint_back_log where sprint_back_log_no = ?'
+			, data.sprint_back_log_no, function (error, results){
+				socket.emit('ToDoDetail', {
+					data : results
+				});
+			});
+	});
+	//투두상세용 ->> 스토리 정보
+	socket.on('DoDetail_UserStory', function (data){
+		client.query('select * from user_story where user_story_no = ?'
+				, data.user_story_no, function (error, results){
+					socket.emit('DoDetail_UserStory', {
+						data : results
+					});
+				});
+	});
+	//투두 상세용 ->> 작업자 정보
+	socket.on('DoDetail_Worker', function (data){
+		client.query('select * from users where user_no = ?'
+				, data.user_no, function (error, results){
+			socket.emit('DoDetail_Worker', {
+				data : results
+			});
+		});
+	});
+	//투두 상세용 ->> 버튼으로 위치 이동
+	socket.on('ThrowOut', function (data){
+		client.query('update sprint_back_log set status = ? where sprint_back_log_no =?'
+				, [data.status, data.sprint_back_log_no]);
+	});
+	//투두 삭제용
+	socket.on('DoDelete', function (data){
+		client.query(
+		'delete from sprint_back_log where sprint_back_log_no = ?'		
+			, data.sprint_back_log_no);
+	});
+	//ToDo Fin ->> 전용
+	//Release Srt ->> 전용
 	//Poker Srt
 	//포커 점수 등록
 	socket.on('PokerAdd', function (data){
@@ -284,7 +311,7 @@ io.sockets.on('connection', function (socket){
 					client.query('select user_no from project_join_list where project_join_no = ? and status = 0',[join[0].project_join_no]
 						,function (error2, user){
 						client.query('select * from users', function (error3, list){	
-							io.sockets.emit('PokerDetail', {
+							socket.emit('PokerDetail', {
 								poker : poker,
 								user : user,
 								list : list
@@ -298,7 +325,7 @@ io.sockets.on('connection', function (socket){
 	socket.on('PokerFind', function (data){
 		client.query('select * from poker where user_story_no = ? and user_no = ?', [data.user_story_no, data.user_no]
 			,function (error, poker){
-			io.sockets.emit('PokerFind', {
+			socket.emit('PokerFind', {
 				FindPoker : poker
 			});
 		});
@@ -313,7 +340,7 @@ io.sockets.on('connection', function (socket){
 							,data.user_story_no, function (error, vote){
 								client.query('select * from poker where user_story_no = ? and score >0'
 									,data.user_story_no, function (error, score){
-										io.sockets.emit('Join_List', {
+										socket.emit('Join_List', {
 											count : count,
 											vote : vote,
 											score : score
@@ -323,7 +350,7 @@ io.sockets.on('connection', function (socket){
 		});
 	});
 	//Project_Join_List Fin
-	/** 스크럼 */
+	//Release Fin ->> 전용
 });
 
 server.listen(port,function(){

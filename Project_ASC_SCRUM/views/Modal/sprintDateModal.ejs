@@ -50,29 +50,5 @@
 </div>
 
 <script>
-	//SOCKET Open
-	var socket = io.connect();
-	//스프린트모달
-	//선택된 스프린트 호출
-	function sprintDetail() {
-		//var cookieName = '${cookie.name.value}';
-		//cookieName = decodeURIComponent(cookieName);
-		//var user = cookieName;
-		if($('.maxSprint').val() > 0){
-			var sprint_no = $('.maxSprint').val();
-		} else {
-			var sprint_no = $('.currentSprint').val();
-		}
-		socket.emit('sprintDetail', {
-			sprint_no : sprint_no
-		});
-	};
-	//스프린트 정보
-	socket.on('sprintDetail', function (data){
-		var da = data.sprint;
-		$('#start_date').val(da[0].start_date.substr(0,10));
-		$('#end_date').val(da[0].end_date.substr(0,10));
-	});		
 	
-	sprintDetail();
 </script>

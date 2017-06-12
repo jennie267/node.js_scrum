@@ -1,13 +1,7 @@
-<script>
-		//SOCKET Open
-		var socket = io.connect();
 		//유저스토리 스크립트
 			//초기 세팅 - UserStory
 			//불러 온다 UserStory
 			function StoryLi() {
-				//var cookieName = '${cookie.name.value}';
-				//cookieName = decodeURIComponent(cookieName);
-				//var user = cookieName;
 				$('.HereToUserStory').html('');
 				socket.emit('StoryList', {
 					project_release_no : <%=project_release_no%>
@@ -48,37 +42,6 @@
 				
 			});
 			//초기세팅 끝 ->> UserStory
-			//초기세팅 ->> Category
-			//불러 온다 카테고리
-			function CallCategoryList() {
-				//var cookieName = '${cookie.name.value}';
-				//cookieName = decodeURIComponent(cookieName);
-				//var user = cookieName;
-				$('.Category').html('');
-				socket.emit('categoryList', {
-					scrum_no : <%=scrum_no%>
-				});
-			};
-			
-			//불러서 넣는다 카테고리
-			socket.on('cateList', function (data){
-				
-				$('.Category').html('');
-				var text = $('.Category');
-				var line = '';
-				//전체 조회 후 받은 데이터
-				var da = data.data;
-				
-				if(da.length > 0){
-					for(var i = 0; i < da.length; i++){
-						line += "<option value='"+da[i].category_no+"'>"+da[i].title+"</option>"
-					};
-					
-          $(line).appendTo(text);
-				};
-				
-			});
-			//초기세팅 끝 ->> Category
 			
 			function deleStory() {
 			//지운다 UserStory
@@ -117,16 +80,18 @@
 				$('.detailStoryPriority').val(da.priority);
 				$('.detailStoryTime').val(da.working_time);
 				CateDetail();
+				console.log(cateNo);
 			});
+			
 			//Category 불러오기
 			function CateDetail(){
-				socket.emit('cateDetail', {
+				socket.emit('StorycateDetail', {
 					category_no : cateNo
 				});
 				cateNo = '';
 			};
 			//카테고리 명 부르기
-			socket.on('StoryCate', function (data) {
+			socket.on('StorycateDetail', function (data) {
 				var da = data.data[0];
 				$('.detailStorycate').val(da.title);
 			});
@@ -136,11 +101,29 @@
 			function ModifyStoryLi() {
 				$('.modifyStory').on('click', function(e){
 					var push = $(this).attr('value');
+					socket.emit('ModifyStoryCate', {
+						scrum_no : <%=scrum_no%>
+					});
 					socket.emit('ModifyStoryLoad', {
 						user_story_no : push
 					});
 				});
 			};
+			
+			//불러서 넣는다 카테고리
+		socket.on('ModifyStoryCate', function (data){
+			$('.ModifyStoryCate').html('');
+			var text = $('.ModifyStoryCate');
+			var line = '';
+			//전체 조회 후 받은 데이터
+			var da = data.data;
+			if(da.length > 0){
+				for(var i = 0; i < da.length; i++){
+					line += "<option value='"+da[i].category_no+"'>"+da[i].title+"</option>"
+				};
+       	$(line).appendTo(text);
+			};
+		});
 			
 			//유저스토리 불러서 넣기
 			socket.on('ModifyStoryLoad', function (data){
@@ -151,8 +134,99 @@
 				$('.ModifyStoryI_want').val(da.i_want);
 				$('.ModifyStorySo_That').val(da.so_that);
 				$('.ModifyStoryPriority').val(da.priority);
-				$('.ModifyStoryCategory').val(da.category_no);
+				$('.ModifyStoryCate').val(da.category_no);
 			});
 			//수정 끝
 			StoryLi();
-</script>
+			//카테고리 부른다
+	$('.registUser').on('click', function(){
+		$('.StoryCateList').html('');
+		socket.emit('StoryCateList', {
+			scrum_no : <%=scrum_no%>
+			});
+	});
+	
+	//불러서 넣는다 카테고리
+	socket.on('StoryCateList', function (data){
+		$('.StoryCateList').html('');
+		var text = $('.StoryCateList');
+		var line = '';
+		//전체 조회 후 받은 데이터
+		var da = data.data;
+			if(da.length > 0){
+				for(var i = 0; i < da.length; i++){
+					line += "<option value='"+da[i].category_no+"'>"+da[i].title+"</option>"
+				};
+       	$(line).appendTo(text);
+			};
+		});
+	
+	//등록 한다 유저스토리
+	$('.addStory').on('click', function(){
+		var title = $('#title').val();
+		var as_a = $('#AsA').val();
+		var i_want = $('#IWant').val();
+		var so_that = $('#SoThat').val();
+		
+		if(title.trim().length > 0 && as_a.trim().length > 0 && i_want.trim().length > 0 && so_that.trim().length >0){
+			socket.emit('StoryAdd', {
+				project_release_no : <%=project_release_no%>,
+				category_no : $('#StoryCateList').val(),
+				title : title,
+				as_a : as_a,
+				i_want : i_want,
+				so_that : so_that,
+				priority : $('#Priority').val()
+			});
+			$(registUserStoryModal).modal('hide');
+			$('#StoryCateList').val('');
+			$('#title').val('');
+			$('#AsA').val('');
+			$('#IWant').val('');
+			$('#SoThat').val('');
+			/** 태스크 새로고침 */
+			StoryLi();
+		}else {
+				swal('빈칸을 모두 채워주세요')
+		}
+			
+	});
+	
+	
+	
+	
+	//유저스토리 수정--------------
+	$('.modifyAdd').on('click', function(){
+			var title = $('.ModifyStoryTitle').val();
+			var as_a = $('.ModifyStoryAs_a').val();
+			var i_want = $('.ModifyStoryI_want').val();
+			var so_that = $('.ModifyStorySo_That').val();
+			if(title.trim().length > 0 && as_a.trim().length > 0 && i_want.trim().length > 0 && so_that.trim().length >0){
+				
+				socket.emit('StoryModify', {
+					project_release_no : <%=project_release_no%>,
+					user_story_no : $('.ModifyStory_No').val(),
+					category_no : $('.ModifyStoryCate').val(),
+					title : $('.ModifyStoryTitle').val(),
+					as_a : $('.ModifyStoryAs_a').val(),
+					i_want : $('.ModifyStoryI_want').val(),
+					so_that : $('.ModifyStorySo_That').val(),
+					priority : $('.ModifyStoryPriority').val()
+				});
+				
+				$(modifyUserStoryModal).modal('hide');
+				$('.ModifyStory_No').val(),
+			
+				$('.ModifyStoryCate').val('');
+				$('.ModifyStoryTitle').val('');
+				$('.ModifyStoryAs_a').val('');
+				$('.ModifyStoryI_want').val('');
+				$('.ModifyStorySo_That').val('');
+				$('.ModifyStoryPriority').val('');
+				/** 태스크 새로고침 */
+				StoryLi();
+			}else {
+				swal('빈칸을 모두 채워주세요')
+			}
+			
+		});

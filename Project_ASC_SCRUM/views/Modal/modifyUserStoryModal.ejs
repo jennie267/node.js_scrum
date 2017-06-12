@@ -16,7 +16,7 @@
           </div>
           <div class="col-xs-6">
           	<input type='hidden' class='ModifyStory_No' value=''>
-            <select id="categoryList" class='ModifyStoryCategory Category' name='categoryList' autofocus style="width: 83%; height: 37px; margin-top: 4px;">
+            <select id="ModifyStoryCate" class='ModifyStoryCate' name='ModifyStoryCate' autofocus style="width: 83%; height: 37px; margin-top: 4px;">
               <!-- CategoryList -->
             </select>
           </div>
@@ -92,42 +92,5 @@
 </div>
 
 <script>
-	//SOCKET Open
-	var socket = io.connect();
-	//유저스토리 수정 모달
-
-	$('.modifyAdd').on('click', function(){
-			var title = $('.ModifyStoryTitle').val();
-			var as_a = $('.ModifyStoryAs_a').val();
-			var i_want = $('.ModifyStoryI_want').val();
-			var so_that = $('.ModifyStorySo_That').val();
-			
-			if(title.trim().length > 0 && as_a.trim().length > 0 && i_want.trim().length > 0 && so_that.trim().length >0){
-				
-				socket.emit('StoryModify', {
-					project_release_no : <%=project_release_no%>,
-					user_story_no : $('.ModifyStory_No').val(),
-					category_no : $('.ModifyStoryCategory').val(),
-					title : $('.ModifyStoryTitle').val(),
-					as_a : $('.ModifyStoryAs_a').val(),
-					i_want : $('.ModifyStoryI_want').val(),
-					so_that : $('.ModifyStorySo_That').val(),
-					priority : $('.ModifyStoryPriority').val()
-				});
-				
-				$(modifyUserStoryModal).modal('hide');
-				$('.ModifyStory_No').val(),
-			
-				$('.ModifyStoryCategory').val('');
-				$('.ModifyStoryTitle').val('');
-				$('.ModifyStoryAs_a').val('');
-				$('.ModifyStoryI_want').val('');
-				$('.ModifyStorySo_That').val('');
-				$('.ModifyStoryPriority').val('');
-				/** 태스크 새로고침 */
-				StoryLi();
-			}else {
-				swal('빈칸을 모두 채워주세요')
-			}
-		});
+	
 </script>

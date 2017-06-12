@@ -12,11 +12,11 @@
 
         <div class="row">
           <div class="col-xs-5 col-xs-offset-1">
-            <label for="categoryList" style="font-size: 27px;"> Release Category </label>
+            <label for="StoryCateList" style="font-size: 27px;"> Release Category </label>
           </div>
           <div class="col-xs-6">
-            <select id="categoryList" class='Category' name='categoryList' autofocus style="width: 83%; height: 37px; margin-top: 4px;">
-              <!-- CategoryList -->
+            <select id="StoryCateList" class='StoryCateList' autofocus style="width: 83%; height: 37px; margin-top: 4px;">
+              <!-- StoryCateList -->
             </select>
           </div>
         </div>
@@ -92,37 +92,5 @@
 </div>
 
 <script>
-	//SOCKET Open
-	var socket = io.connect();
-	//유저스토리 등록 모달
-	//등록 한다 유저스토리
-	$('.addStory').on('click', function(){
-		var title = $('#title').val();
-		var as_a = $('#AsA').val();
-		var i_want = $('#IWant').val();
-		var so_that = $('#SoThat').val();
-		
-		if(title.trim().length > 0 && as_a.trim().length > 0 && i_want.trim().length > 0 && so_that.trim().length >0){
-			socket.emit('StoryAdd', {
-				project_release_no : <%=project_release_no%>,
-				category_no : $('#categoryList').val(),
-				title : title,
-				as_a : as_a,
-				i_want : i_want,
-				so_that : so_that,
-				priority : $('#Priority').val()
-			});
-			$(registUserStoryModal).modal('hide');
-			$('#categoryList').val('');
-			$('#title').val('');
-			$('#AsA').val('');
-			$('#IWant').val('');
-			$('#SoThat').val('');
-			$('#Priority').val('');
-			/** 태스크 새로고침 */
-			StoryLi();
-		}else {
-				swal('빈칸을 모두 채워주세요')
-		}
-	});
+	
 </script>

@@ -2,10 +2,10 @@
 
 	//SOCKET Open
 	var socket = io.connect();
-	
+	<% include ../include/categoryScript.ejs %>
 	<!-- /#page-wrapper -->
 	//유저스토리 디테일 
-	function detailStoryLi() {
+	function releaseStoryLi() {
 		$('.DetailPoker').on('click', function(e){
 			var push = $(this).attr('value');
 			socket.emit('StoryDetail', {
@@ -14,7 +14,7 @@
 		});
 	};
 	/** 마스터용 스토리 뿌리기 */
-	function detailStoryLiMaster() {
+	function releaseStoryLiMaster() {
 		$('.DetailPokerMaster').on('click', function(e){
 			var push = $(this).attr('value');
 			//UserStory 호출
@@ -27,6 +27,7 @@
 				project_join_no : <%=project_join_no%>,
 				user_story_no : push
 			});
+			
 		});
 	};
 			
@@ -176,6 +177,168 @@
   });
 	
 	
-	detailStoryLi();
-	detailStoryLiMaster();
+	//여기까지가 기본 영역----------------------------
+	//팀원용 모달 영역-----------------------------
+	$('.DetailPoker').on('click', function (){
+	});
+		releaseStoryLi();
+		releaseStoryLiMaster();
+	
+	//여기까지가 팀원용 모달 영역-----------------------
+	//마스터용 모달 영역 -----------------------------------
+	$('.DetailPokerMaster').on('click', function (){
+		etcScore();
+		SetScore();
+	});
+	function SetScore(){
+	$('.SetScore').on('click', function (e){
+		if($('.VotePeople').val() == $('.AllPeople').val()){
+			socket.emit('StorySetScore', {
+				user_story_no : $('.PokerStory').val(),
+				working_time : $('.ScoreAdd').val()
+			});
+			$('.PokerStory').val('');
+			$('.ScoreAdd').val('');
+			$(planningPokerMasterModal).modal('hide');
+		} else {
+			swal({     
+				title: '투표가 진행중입니다.',
+        type: 'warning',
+        confirmButtonText: '닫기'
+      })
+		}	
+	});
+	}
+	function etcScore(){
+	$('.ScoreModal').on('click', function(e){
+			var push = $('.PokerStory').val();
+			//Poker 정보 호출
+			socket.emit('PokerDetail', {
+				user_story_no : push,
+				project_list_no : <%=project_list_no%>
+			});
+		});
+		//기타 점수 모달 영역---------
+		socket.on('PokerDetail', function (data){
+		var poker = data.poker;
+		var user = data.user;
+		var list = data.list;
+		
+		console.log(poker);
+		console.log(user);
+		console.log(list);
+		
+		$('.ScoreHere').html('');
+		var ScoreHere = $('.ScoreHere');
+		var ScoreList = '';
+		
+		if(poker.length > 0){
+			for(var i = 0; i < poker.length; i++){
+				if(poker[i].score != '0.5' && poker[i].score != '1' && poker[i].score != '2' && poker[i].score != '5'
+				&& poker[i].score != '10'){
+				ScoreList +=	"<div class='col-xs-2 col-xs-offset-1'>"
+        ScoreList +=  	"<input type='text' class='col-xs-12 text-center noPadding'"
+        ScoreList +=    "style='background-color:transparent; border:none; width: 100%; font-weight: bold; font-size: 17px;'"
+        ScoreList +=    "disabled value='유저명'>"
+        ScoreList +=  "</div>"
+        ScoreList +=  "<div class='col-xs-3'>"
+        ScoreList +=  	"<input type='text' class='col-xs-12 text-center' id='Poker_User'"
+        ScoreList +=    "style='background-color:transparent; border:none; width: 100%; font-weight: bold; font-size: 17px;'"
+        ScoreList +=    "disabled value='"
+        
+        for(var j = 0; j < user.length; j++){
+        	for(var k = 0; k < list.length; k++){
+        		if(poker[i].user_no == user[j].user_no == list[k].user_no){
+        			ScoreList += list[k].name;
+        		}
+        	}
+        }
+        
+        ScoreList +=		"'>"
+        ScoreList +=  "</div>"
+        ScoreList +=  "<div class='col-xs-2 col-xs-offset-1'>"
+        ScoreList +=  	"<input type='text' class='col-xs-12 text-center noPadding'"
+        ScoreList +=    "style='background-color:transparent; border:none; width: 100%; font-weight: bold; font-size: 17px;'"
+        ScoreList +=    "disabled value='점수'>"
+        ScoreList +=  "</div>"
+        ScoreList +=  "<div class='col-xs-3'>"
+        ScoreList +=  	"<input type='text' class='col-xs-12 text-center' id='Poker_Score'"
+        ScoreList +=    "style='background-color:transparent; border:none; width: 100%; font-weight: bold; font-size: 17px;'"
+        ScoreList +=    "disabled value='"+poker[i].score+"'>"
+        ScoreList +=  "</div>"
+				}
+			};
+		};
+		
+		$(ScoreList).appendTo(ScoreHere);
+		
+	});
+	}
+	//여기까지가 기타점수 모달 영역-------------------------
+		
+		//여기까지가 마스터용 모달 영역 -------------------------
+		//팀원요 포커 영역-----------------
+		var check = 0;
+	//팀원용 포커
+	$('.score').on('click', function (e){
+		var text = $('.inputScore');
+		var score = $(this).attr('value');
+		text.val(score);
+	});
+		save();
+	function save(){		
+		$('.savePoker').on('click', function(e){
+			var scoreSet = $('.inputScore').val();
+			if(scoreSet.trim().length > 0){
+				socket.emit('PokerFind', {
+					user_story_no : $('.PokerStory').val(),
+					user_no : $('.PokerUser').val(),
+				});
+		
+				socket.on('PokerFind', function (data){
+					var da = data.FindPoker;
+					console.log(da.length);
+					if(da.length > 0){
+						check = 0;
+					} else {
+						check = 1;
+					};
+				callFind();
+				});
+			} else {
+				swal({     
+					title: '점수를 입력해주세요.',
+        	type: 'warning',
+        	confirmButtonText: '닫기'
+      	})
+				$('.inputScore').val('');
+				check = 0 ;
+			}
+		});	
+	}
+	function callFind(){	
+		if(check == 1){
+			socket.emit('PokerAdd', {
+				user_story_no : $('.PokerStory').val(),
+				user_no : $('.PokerUser').val(),
+				score : $('.inputScore').val()
+			});
+		
+			$('.PokerStory').val('');
+			$('.PokerUser').val('');
+			$('.inputScore').val('');
+			$(planningPokerModal).modal('hide');
+			check = 0;
+			location.reload();
+		} else {
+				swal({     
+					title: '투표가 완료되었습니다.',
+        	type: 'warning',
+        	confirmButtonText: '닫기'
+      	})
+				$('.inputScore').val('');
+				check = 0;
+			}
+	};
+	//여기까지가 팀원 포커 모달 영역------------------------
 </script>

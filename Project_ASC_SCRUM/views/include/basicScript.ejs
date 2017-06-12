@@ -1,75 +1,62 @@
 <script>
 //SOCKET Open
 		var socket = io.connect();
-	/** 스프린트 관련 */
-	/** 스프린트 넘어가기 */
-	$('#nextSprintBtn').on("click", function(event) {
-		event.preventDefault();
-	// 	var chg = (decodeURIComponent('${cookie.name.value}'));
-	// 	var articleNo = $(this).next().next().val();
-	// 	var productN = $(this).next().next().next().val();
-	// 	var from = $(this).next().next().next().next().val();
 	
-	var text = '넘어가실 경우 되돌릴 수 없습니다.'
-			text += '\n'+'ToDo 및 Doing 또한 넘어갑니다.'
-	swal({
-		  title: '다음 스프린트로'+'\n'+'넘어가시겠습니까?',
-			text: text,
-		  showCancelButton: true,
-		  confirmButtonColor: '#3085d6',
-		  cancelButtonColor: '#d33',
-		  confirmButtonText: '확인',
-		  cancelButtonText: '취소'
-		}).then(function () {
-  		if($('.maxSprint').val() > 0){
-				var sprint_no = $('.maxSprint').val();
-			} else {
-				var sprint_no = $('.currentSprint').val();
-			}
-			  socket.emit('sprintAdd', {
-			    scrum_no : <%=scrum_no%>,
-			 		sprint_no : sprint_no
-			 	});
-			 location.href='/taskboard/<%=project_list_no%>/0/<%=loginId%>';
-  });		  
-		  
-		  
+		//Category 영역 ->> Srt
+		<% include ../include/categoryScript.ejs %>
+		//Category 영역 <<- Fin
 		
-		return false;
-	});
-	/** 스프린트 제거 */
-	$('#ClearSprintBtn').on("click", function(event) {
-		event.preventDefault();
-	// 	var chg = (decodeURIComponent('${cookie.name.value}'));
-	// 	var articleNo = $(this).next().next().val();
-	// 	var productN = $(this).next().next().next().val();
-	// 	var from = $(this).next().next().next().next().val();
-
-	swal({
-		  title: '전체 스프린트를'+'\n'+'지우시겠습니까??',
-			text: '삭제 하실 경우 되돌릴 수 없습니다.',
-		  showCancelButton: true,
-		  confirmButtonColor: '#3085d6',
-		  cancelButtonColor: '#d33',
-		  confirmButtonText: '확인',
-		  cancelButtonText: '취소',
-		  showLoaderOnConfirm: true
-		}).then(function () {
-				if($('.maxSprint').val() > 0){
-					var sprint_no = $('.maxSprint').val();
-				} else {
-					var sprint_no = $('.currentSprint').val();
-				}
-			  socket.emit('sprintRemove', {
-			    scrum_no : <%=scrum_no%>,
-			    sprint_no : sprint_no
-			  });
-			  location.href='/taskboard/<%=project_list_no%>/0/<%=loginId%>';
-  });
+		//UserStory 영역 ->> Srt
+		<% include ../include/userStoryScript.ejs %>
+		//UserStory 영역 <<- Fin
+	
+		//ToDo 영역 ->> Srt
+		<% include ../include/toDoScript.ejs %>
+		//ToDo 영역 <<- Fin
 		
-		return false;
-	});
-	/** 스프린트 관련 종료 */
+		//Sprint 영역  ->> Srt
+		<% include ../include/sprintScript.ejs %>
+		//Sprint 영역 <<- Fin
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/*채팅창 팝업*/
 	$(function() {
 		$("#chatBtn").click(function() {

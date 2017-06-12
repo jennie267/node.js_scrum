@@ -1,6 +1,3 @@
-<script>
-		//SOCKET Open
-		var socket = io.connect();
 		//투두 스크립트
 			//불러 온다 Todo-
 			function todoLi() {
@@ -19,13 +16,13 @@
 				ToDo.html('');
 				Doing.html('');
 				Done.html('');
-				socket.emit('todoList', {
+				socket.emit('ToDoList', {
 					sprint_no
 				});
 			};
 			
 			//불러서 넣는다 todo
-			socket.on('todoList', function (data){
+			socket.on('ToDoList', function (data){
 				var ToDo = $('.HereToToDo');
 				var Doing = $('.HereToDoing');
 				var Done = $('.HereToDone');
@@ -93,48 +90,121 @@
           $(todoLine).appendTo(ToDo);
           $(doingLine).appendTo(Doing);
           $(doneLine).appendTo(Done);
-          
-          deleDo();
-          detailDoUserLi();
-          ModifyDoLi();
 				}	else {
 					ToDo.html('');
 					Doing.html('');
 					Done.html('');
 				};
 				
-				
+          detailBtn();
+          deleDo();
+					ModifyDoLi();
 			});
 			
-			//지운다 Do
-			function deleDo() {
-			$('.delDo').on('click',	function(e) {
-				e.preventDefault();
-				var push = $(this).attr('value');
-				socket.emit('DoDelete', {
-					sprint_back_log_no : push
-				});
+			
+			todoLi();
+		//투두 등록--------------------------------------------
+		//불러 온다 UserStory
+		function DoStoryLi() {
+			//var cookieName = '${cookie.name.value}';
+			//cookieName = decodeURIComponent(cookieName);
+			//var user = cookieName;
+			$('.DoStory').html('');
+			socket.emit('DoStory', {
+				project_release_no : <%=project_release_no%>
+			});
+		};
+			
+		//불러서 넣는다 UserStory
+		socket.on('DoStory', function (data){
+		$('.DoStory').html('');
+		var text = $('.DoStory');
+		var line = '';
+		//전체 조회 후 받은 데이터
+		var da = data.data;
 				
-				/** 모든곳에 새로고침을 달아야함 추가 / 수정 / 삭제 */
-				$('.HereToToDo').html('');
-					todoLi();
-				});
+			if(da.length > 0){
+				for(var i = 0; i < da.length; i++){
+					line += "<option value='"+da[i].user_story_no+"'>"+da[i].title+"</option>"
+				};
+        $(line).appendTo(text);
 			};
+		});
 			
-			//유저스토리 디테일 
-			function detailDoUserLi() {
-				$('.detailDo').on('click', function(e){
-					var push = $(this).attr('value');
-					socket.emit('DoDetail', {
-						sprint_back_log_no : push
-					});
-				});
+		//불러 온다 유저
+		function DoWorkerLi() {
+			//var cookieName = '${cookie.name.value}';
+			//cookieName = decodeURIComponent(cookieName);
+			//var user = cookieName;
+			$('.DoWorker').html('');
+			socket.emit('DoUserList', {
+				project_list_no : <%=project_list_no%>					
+			});
+		};
+		
+		//불러서 넣는다 유저
+		socket.on('DoUserList', function (data){
+			$('.DoWorker').html('');
+			var text = $('.DoWorker');
+			var line = '';
+			//전체 조회 후 받은 데이터
+			var list = data.list;
+			var user = data.user;
+			if(user.length > 0){
+				for(var i = 0; i < user.length; i++){
+					for(var j = 0; j < list.length; j++){
+						if(user[i].user_no == list[j].user_no){
+							line += "<option value='"+user[i].user_no+"'>"+list[j].name+"</option>"
+						}
+					}
+				};
+         $(line).appendTo(text);
 			};
+		});
+		
+		//등록 한다 Todo
+		$('.DoAdd').on('click', function(){
+			var story = $('.DoStory').val();
+			var user_no = $('.DoWorker').val();
+			var content = $('.registContent').val();
 			
-			//유저스토리 불러서 넣기
+			if(content.trim().length > 0){
+				socket.emit('DoAdd', {
+					sprint_no : <%=Max%>,
+					user_story_no : story,
+					user_no : user_no,
+					content : content
+				});
+				$(registTodoModal).modal('hide');
+				$('.DoStory').val('');
+				$('.DoWorker').val('');
+				$('.registContent').val('');
+				/** 태스크 새로고침 */
+				todoLi();
+			} else {
+				swal('빈칸을 모두 채워주세요')
+			}
+		});
+		$('.ToDoMaking').on('click', function(){
+			DoStoryLi();
+			DoWorkerLi();
+		});
+		//여기까지가 등록 --------------------------------------
+		//투두 상세--------------------------------
+		function detailBtn(){
+		$('.detailDo').on('click', function(e){
+			var push = $(this).attr('value');
+			detailDoUserLi(push);
+		});
+		}
+		function detailDoUserLi(push) {
+			socket.emit('ToDoDetail', {
+				sprint_back_log_no : push
+			});
+		};
 			var Do_UserStory;
 			var Do_Worker;
-			socket.on('DoDetail', function (data){
+			socket.on('ToDoDetail', function (data){
 				var da = data.data[0];
 				Do_UserStory = da.user_story_no;
 				Do_Worker = da.user_no;
@@ -145,15 +215,17 @@
 				} else if(da.status == 2){
 					$('.detailBackLogStatus').val('Done');
 				}
-				$('.detailDoContent').val(da.content);
-				$('.detailUserPriority').val(da.priority);
 				$('.detailBackLogNo').val(da.sprint_back_log_no);
 				$('.detailstatus').val(da.status);
+				$('.detailDoContent').val(da.content);
+				
 				DoDetail_UserStory();
 				DoDetail_Worker();
 				DoModify_Change();
-			});
-			//DoDetail_UserStory 불러오기
+				DoModify_Comp();
+		});
+		
+		//DoDetail_UserStory 불러오기
 			function DoDetail_UserStory(){
 				socket.emit('DoDetail_UserStory', {
 					user_story_no : Do_UserStory
@@ -173,34 +245,12 @@
 				});
 				Do_Worker = '';
 			};
-			//DoDetail_UserStory 명 부르기
+			//DoDetail_Worker 명 부르기
 			socket.on('DoDetail_Worker', function (data) {
 				var da = data.data[0];
 				$('.detailDoWorker').val(da.name);
-			});
-			//디테일 끝
+			});	
 			
-			//Do 수정-------------------------------------------------------
-			function ModifyDoLi() {
-				$('.ModifyDo').on('click', function(e){
-					var push = $(this).attr('value');
-					socket.emit('DoModifyLoad', {
-						sprint_back_log_no : push
-					});
-				});
-			};
-			
-			//Do 불러서 넣기
-			socket.on('DoModifyLoad', function (data){
-				var da = data.data[0];
-				$('#sprint_no').val(da.sprint_back_log_no);
-				$('#DoModifyUser').val(da.user_story_no);
-				$('#DoContent').val(da.content);
-				$('#DoStatus').val(da.status);
-				$('#DoModifyWorker').val(da.user_no);
-			});
-			
-			//수정 끝------------------------------------------------
 			//버튼으로 단계 설정
 			function DoModify_Change(){ 
 				$('.ThrowOut').on('click', function(){
@@ -241,8 +291,132 @@
 					};
 				});
 				
+			};	
+		
+		//여기까지가 상세--------------------------------------
+		//투두 수정--------------------------------
+		function ModifyDoLi() {
+				$('.ModifyDo').on('click', function(e){
+					var push = $(this).attr('value');
+					socket.emit('DoModifyStory', {
+						project_release_no : <%=project_release_no%>
+					});
+					socket.emit('DoModifyLoad', {
+						sprint_back_log_no : push
+					});
+					DoModify_Status();
+					DoModify_Worker();
+					DoModify_Comp();
+				});
 			};
+		//Story 불러서 넣기
+		socket.on('DoModifyStory', function (data){
+			$('.DoModifyStory').html('');
+			var text = $('.DoModifyStory');
+			var line = '';
+			//전체 조회 후 받은 데이터
+			var da = data.data;
+			if(da.length > 0){
+				for(var i = 0; i < da.length; i++){
+					line += "<option value='"+da[i].user_story_no+"'>"+da[i].title+"</option>"
+				};
+        $(line).appendTo(text);
+			};
+		});
+		//DoModify_Worker 불러오기
+		function DoModify_Worker(){
+			socket.emit('DoModify_Worker', {
+				project_list_no : <%=project_list_no%>
+			});
+		};
+		//DoDetail_UserStory 명 부르기
+		socket.on('DoModify_Worker', function (data) {
+			$('#DoModifyWorker').html('');
+			var text = $('#DoModifyWorker');
+			var line = '';
+			//전체 조회 후 받은 데이터
+			var list = data.list;
+			var user = data.user;
+			if(user.length > 0){
+				for(var i = 0; i < user.length; i++){
+					for(var j = 0; j < list.length; j++){
+						if(user[i].user_no == list[j].user_no){
+							line += "<option value='"+user[i].user_no+"'>"+list[j].name+"</option>"
+						}
+						}
+				};
+				
+         $(line).appendTo(text);
+			};
+		});
+		//상태 부르기
+		function DoModify_Status(){
+			$('#DoStatus').html('');
+			var text = $('#DoStatus');
+			var line = '';
+				
+			for(var i = 0; i < 3; i++){
+				if(i == 0){
+					line += "<option value='"+i+"'>Todo</option>"
+				} else if(i == 1){
+					line += "<option value='"+i+"'>Doing</option>"
+				}	else if(i == 2){
+					line += "<option value='"+i+"'>Done</option>"
+				}			
+			}
+			$(line).appendTo(text);
+		};
 			
-			//탭 변경------------------------------------------------
-			todoLi();
-</script>
+		//Do 불러서 넣기
+			socket.on('DoModifyLoad', function (data){
+				var da = data.data[0];
+				$('#sprint_no').val(da.sprint_back_log_no);
+				$('.DoModifyStory').val(da.user_story_no);
+				$('#DoContent').val(da.content);
+				$('#DoStatus').val(da.status);
+				$('#DoModifyWorker').val(da.user_no);
+			});
+		
+		//수정	
+		function DoModify_Comp(){ 
+		$('.DoModifyComp').on('click', function(){
+			var content = $('#DoContent').val();
+			console.log($('#DoModifyStory').val());
+			if(content.trim().length > 0){
+				socket.emit('DoModify', {
+					sprint_back_log_no : $('#sprint_no').val(),
+					user_story_no : $('#DoModifyStory').val(),
+					user_no : $('#DoModifyWorker').val(),
+					content : content,
+					status : $('#DoStatus').val()
+				});
+				$(modifyTodoModal).modal('hide');
+				$('#sprint_no').val('');
+				$('#DoModifyStory').val('');
+				$('#DoModifyWorker').val('');
+				$('#DoContent').val('');
+				$('#DoStatus').val('');
+				/** 태스크 새로고침 */
+				todoLi();
+			}else {
+				swal('빈칸을 모두 채워주세요')
+			}	
+		});
+		}
+		//여기까지가 수정----------------------------------
+		//투두 삭제--------------------------------
+		function deleDo() {
+			$('.delDo').on('click',	function(e) {
+				e.preventDefault();
+				var push = $(this).attr('value');
+				socket.emit('DoDelete', {
+					sprint_back_log_no : push
+				});
+				
+				/** 모든곳에 새로고침을 달아야함 추가 / 수정 / 삭제 */
+				$('.HereToToDo').html('');
+					todoLi();
+				});
+			};
+		//여기까지가 삭제------------------------------------
+		//설정한다 초기세팅

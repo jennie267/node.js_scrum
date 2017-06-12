@@ -87,38 +87,6 @@
     </div>
   </div>
 </div>
-
 <% include ../Modal/planningPokerScoreModal.ejs %>
 <script>
-	//SOCKET Open
-	var socket = io.connect();
-	//마스터용 포커
-	$('.SetScore').on('click', function (e){
-		if($('.VotePeople').val() == $('.AllPeople').val()){
-			socket.emit('StorySetScore', {
-				user_story_no : $('.PokerStory').val(),
-				working_time : $('.ScoreAdd').val()
-			});
-			$('.PokerStory').val('');
-			$('.ScoreAdd').val('');
-			$(planningPokerMasterModal).modal('hide');
-		} else {
-			swal({     
-				title: '투표가 진행중입니다.',
-        type: 'warning',
-        confirmButtonText: '닫기'
-      })
-		}	
-	});
-	$('.ScoreModal').on('click', function(e){
-			var push = $('.PokerStory').val();
-			//Poker 정보 호출
-			socket.emit('PokerDetail', {
-				user_story_no : push,
-				project_list_no : <%=project_list_no%>
-			});
-			location.reload();
-		});
-		
-		
 </script>
