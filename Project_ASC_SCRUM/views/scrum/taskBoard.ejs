@@ -36,6 +36,24 @@
     bottom: 50px;
     z-index: 999;
 	}
+	.HereToToDo {
+    height: 100%;
+    padding-left: 1px;
+    padding-right: 1px;
+    border: none;
+}
+	.HereToDoing {
+    height: 100%;
+    padding-left: 1px;
+    padding-right: 1px;
+    border: none;
+}
+	.HereToDone {
+    height: 100%;
+    padding-left: 1px;
+    padding-right: 1px;
+    border: none;
+}
 </style>
 
 </head>
@@ -172,13 +190,13 @@
     			<div class="col-lg-3 col-md-6 HereToUserStory">
       			<!-- User Story -->
     			</div>
-    			<div class="col-lg-3 col-md-6 HereToToDo">
+    			<div class="col-lg-3 col-md-6 HereToToDo" id='0' ondrop="drop(event)" ondragover="allowDrop(event)">
       			<!-- ToDo -->
     			</div>
-	    		<div class="col-lg-3 col-md-6 HereToDoing">
+	    		<div class="col-lg-3 col-md-6 HereToDoing" id='1' ondrop="drop(event)" ondragover="allowDrop(event)">
 	      		<!-- Doing -->
 	    		</div>
-	    		<div class="col-lg-3 col-md-6 HereToDone">
+	    		<div class="col-lg-3 col-md-6 HereToDone" id='2' ondrop="drop(event)" ondragover="allowDrop(event)">
 	      		<!-- Done -->
 	    		</div>
   			</div>

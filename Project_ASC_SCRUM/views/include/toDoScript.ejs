@@ -39,8 +39,8 @@
 				if(da.length > 0){
 					for(var i = 0; i < da.length; i++){
 						if(da[i].status == 0){
-							todoLine += "<div class='panel panel-gray'>"
-        			todoLine +=	  "<div class='panel-heading'>"
+							todoLine += "<div class='panel panel-gray' id='"+da[i].sprint_back_log_no+"' draggable='true' ondragstart='drag(event)'>"
+        			todoLine +=	  "<div class='panel-heading' >"
           		todoLine +=			"<div class='row'>"
             	todoLine +=				"<div class='col-xs-6 text-left'>"
             	todoLine +=  				"<div class='content'>"
@@ -54,7 +54,7 @@
             	todoLine +=  			"<div class='content'><a class='detailDo' data-toggle='modal' data-target='#detailTodoModal' value='"+da[i].sprint_back_log_no+"'>"+da[i].content+"</a></div>"
             	todoLine +=			"</div> </div> </div> </div>"
 						} else if(da[i].status == 1){
-							doingLine += "<div class='panel panel-gray'>"
+							doingLine += "<div class='panel panel-gray' id='"+da[i].sprint_back_log_no+"' draggable='true' ondragstart='drag(event)'>"
         			doingLine +=	  "<div class='panel-heading'>"
           		doingLine +=			"<div class='row'>"
             	doingLine +=				"<div class='col-xs-6 text-left'>"
@@ -69,7 +69,7 @@
             	doingLine +=  			"<div class='content'><a class='detailDo' data-toggle='modal' data-target='#detailTodoModal' value='"+da[i].sprint_back_log_no+"'>"+da[i].content+"</a></div>"
             	doingLine +=			"</div> </div> </div> </div>"
 						} else if(da[i].status == 2){
-							doneLine += "<div class='panel panel-gray'>"
+							doneLine += "<div class='panel panel-gray' id='"+da[i].sprint_back_log_no+"' draggable='true' ondragstart='drag(event)'>"
         			doneLine +=	  "<div class='panel-heading'>"
           		doneLine +=			"<div class='row'>"
             	doneLine +=				"<div class='col-xs-6 text-left'>"
@@ -101,7 +101,31 @@
 					ModifyDoLi();
 			});
 			
-			
+			function allowDrop(ev) {
+    		ev.preventDefault();
+			}
+			var drag_no = 0;
+			function drag(ev) {
+				drag_no = ev.target.id;
+			}
+
+			function drop(ev) {
+    		ev.preventDefault();
+				if(ev.target.id.length == 0){
+					swal('빈 공간에 드래그를 해주세요');
+				} else if(ev.target.id != 0 && ev.target.id != 1 && ev.target.id != 2){
+    			swal('빈 공간에 드래그를 해주세요');
+    		} else {
+    			socket.emit('ThrowOut', {
+						sprint_back_log_no : drag_no,
+						status : ev.target.id
+					});
+    		}
+    		
+    		parent='';
+    		drag_no = 0;
+    		todoLi();
+			}
 			todoLi();
 		//투두 등록--------------------------------------------
 		//불러 온다 UserStory
