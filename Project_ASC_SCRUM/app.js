@@ -280,9 +280,15 @@ io.sockets.on('connection', function (socket){
 	});
 	//투두 수정
 	socket.on('DoModify', function (data){
-		client.query('update sprint_back_log set user_story_no = ?, user_no = ?, content = ?, status = ? where sprint_back_log_no = ?'
+		if(data.status != 2){
+		client.query('update sprint_back_log set user_story_no = ?, user_no = ?, content = ?, status = ?, done_date = null where sprint_back_log_no = ?'
 				, [data.user_story_no, data.user_no, 
 					data.content, data.status, data.sprint_back_log_no]);
+		} else {
+			client.query('update sprint_back_log set user_story_no = ?, user_no = ?, content = ?, status = ?, done_date = now() where sprint_back_log_no = ?'
+					, [data.user_story_no, data.user_no, 
+						data.content, data.status, data.sprint_back_log_no]);
+		}
 	});
 	//투두 상세
 	//투두 정보
@@ -314,8 +320,13 @@ io.sockets.on('connection', function (socket){
 	});
 	//투두 상세용 ->> 버튼으로 위치 이동
 	socket.on('ThrowOut', function (data){
-		client.query('update sprint_back_log set status = ? where sprint_back_log_no =?'
+		if(data.status != 2){
+		client.query('update sprint_back_log set status = ?, done_date = null where sprint_back_log_no =?'
 				, [data.status, data.sprint_back_log_no]);
+		} else {
+			client.query('update sprint_back_log set status = ?, done_date = now() where sprint_back_log_no =?'
+					, [data.status, data.sprint_back_log_no]);
+		}
 	});
 	//투두 삭제용
 	socket.on('DoDelete', function (data){

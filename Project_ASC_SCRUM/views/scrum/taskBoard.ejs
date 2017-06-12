@@ -36,23 +36,49 @@
     bottom: 50px;
     z-index: 999;
 	}
+	.UserStoryCSS{
+		height: 100%;
+		background-color: rgba(51, 122, 183, 0.46);
+		border-radius: 8px;
+		padding-left : 0.5px;
+		padding-right : 0.5px;
+}
 	.HereToToDo {
     height: 100%;
-    padding-left: 1px;
-    padding-right: 1px;
-    border: none;
+
+    background-color: rgba(92, 184, 92, 0.46);
+		border-radius: 8px;	
+		padding-left : 0.5px;
+		padding-right : 0.5px;
 }
 	.HereToDoing {
     height: 100%;
-    padding-left: 1px;
-    padding-right: 1px;
-    border: none;
+    
+    background-color: rgba(240, 173, 78, 0.46);
+		border-radius: 8px;	
+		padding-left : 0.5px;
+		padding-right : 0.5px;
 }
 	.HereToDone {
     height: 100%;
-    padding-left: 1px;
-    padding-right: 1px;
-    border: none;
+    
+    background-color: rgba(217, 83, 79, 0.46);
+		border-radius: 8px;	
+		padding-left : 0.5px;
+		padding-right : 0.5px;
+}
+
+.UserStoryCard{
+		border-radius: 8px;
+}
+.ToDoCard{
+		border-radius : 8px;
+}
+.DoingCard{
+		border-radius : 8px;
+}
+.DoneCard{
+		border-radius : 8px;
 }
 </style>
 
@@ -187,17 +213,25 @@
       <!-- Tab2 -->
   			<!-- Tab 시작 -->
   			<div class=row>
-    			<div class="col-lg-3 col-md-6 HereToUserStory">
+    			<div class="col-lg-3 col-md-6">
+  					<div class='UserStoryCSS HereToUserStory'>
       			<!-- User Story -->
+    				</div>
     			</div>
-    			<div class="col-lg-3 col-md-6 HereToToDo" id='0' ondrop="drop(event)" ondragover="allowDrop(event)">
+    			<div class="col-lg-3 col-md-6" >
+  					<div class='HereToToDo' id='0' ondrop="drop(event)" ondragover="allowDrop(event)">
       			<!-- ToDo -->
+    				</div>
     			</div>
-	    		<div class="col-lg-3 col-md-6 HereToDoing" id='1' ondrop="drop(event)" ondragover="allowDrop(event)">
+	    		<div class="col-lg-3 col-md-6" >
+  					<div class='HereToDoing' id='1' ondrop="drop(event)" ondragover="allowDrop(event)">
 	      		<!-- Doing -->
+	      		</div>
 	    		</div>
-	    		<div class="col-lg-3 col-md-6 HereToDone" id='2' ondrop="drop(event)" ondragover="allowDrop(event)">
+	    		<div class="col-lg-3 col-md-6">
+  					<div class='HereToDone'  id='2' ondrop="drop(event)" ondragover="allowDrop(event)">
 	      		<!-- Done -->
+	      		</div>
 	    		</div>
   			</div>
   	<!-- 고정형식 종료 -->

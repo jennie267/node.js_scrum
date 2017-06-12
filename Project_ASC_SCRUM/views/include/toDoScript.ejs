@@ -39,8 +39,8 @@
 				if(da.length > 0){
 					for(var i = 0; i < da.length; i++){
 						if(da[i].status == 0){
-							todoLine += "<div class='panel panel-gray' id='"+da[i].sprint_back_log_no+"' draggable='true' ondragstart='drag(event)'>"
-        			todoLine +=	  "<div class='panel-heading' >"
+							todoLine += "<div class='panel panel-gray ToDoCard' id='"+da[i].sprint_back_log_no+"' draggable='true' ondragstart='drag(event)'>"
+        			todoLine +=	  "<div class='panel-heading ToDoCard' >"
           		todoLine +=			"<div class='row'>"
             	todoLine +=				"<div class='col-xs-6 text-left'>"
             	todoLine +=  				"<div class='content'>"
@@ -54,8 +54,8 @@
             	todoLine +=  			"<div class='content'><a class='detailDo' data-toggle='modal' data-target='#detailTodoModal' value='"+da[i].sprint_back_log_no+"'>"+da[i].content+"</a></div>"
             	todoLine +=			"</div> </div> </div> </div>"
 						} else if(da[i].status == 1){
-							doingLine += "<div class='panel panel-gray' id='"+da[i].sprint_back_log_no+"' draggable='true' ondragstart='drag(event)'>"
-        			doingLine +=	  "<div class='panel-heading'>"
+							doingLine += "<div class='panel panel-gray DoingCard' id='"+da[i].sprint_back_log_no+"' draggable='true' ondragstart='drag(event)'>"
+        			doingLine +=	  "<div class='panel-heading DoingCard'>"
           		doingLine +=			"<div class='row'>"
             	doingLine +=				"<div class='col-xs-6 text-left'>"
             	doingLine +=  				"<div class='content'>"
@@ -69,8 +69,8 @@
             	doingLine +=  			"<div class='content'><a class='detailDo' data-toggle='modal' data-target='#detailTodoModal' value='"+da[i].sprint_back_log_no+"'>"+da[i].content+"</a></div>"
             	doingLine +=			"</div> </div> </div> </div>"
 						} else if(da[i].status == 2){
-							doneLine += "<div class='panel panel-gray' id='"+da[i].sprint_back_log_no+"' draggable='true' ondragstart='drag(event)'>"
-        			doneLine +=	  "<div class='panel-heading'>"
+							doneLine += "<div class='panel panel-gray DoneCard' id='"+da[i].sprint_back_log_no+"' draggable='true' ondragstart='drag(event)'>"
+        			doneLine +=	  "<div class='panel-heading DoneCard'>"
           		doneLine +=			"<div class='row'>"
             	doneLine +=				"<div class='col-xs-6 text-left'>"
             	doneLine +=  				"<div class='content'>"
@@ -242,7 +242,15 @@
 				$('.detailBackLogNo').val(da.sprint_back_log_no);
 				$('.detailstatus').val(da.status);
 				$('.detailDoContent').val(da.content);
-				
+				if(da.status != 2){
+					$('.detailDate').hide();
+						$('.detailDoDate').val('');
+				} else {
+					$('.detailDate').show();
+					if(da.done_date != null){
+						$('.detailDoDate').val(da.done_date.substr(0,10));
+					}
+				}
 				DoDetail_UserStory();
 				DoDetail_Worker();
 				DoModify_Change();

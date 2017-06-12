@@ -65,7 +65,7 @@
 
 	swal({
 		  title: '전체 스프린트를'+'\n'+'지우시겠습니까??',
-			text: '삭제 하실 경우 되돌릴 수 없습니다.',
+			text: '삭제하실 경우 되돌릴 수 없습니다.',
 		  showCancelButton: true,
 		  confirmButtonColor: '#3085d6',
 		  cancelButtonColor: '#d33',
@@ -79,8 +79,7 @@
 					var sprint_no = $('.currentSprint').val();
 				}
 			  socket.emit('sprintRemove', {
-			    scrum_no : <%=scrum_no%>,
-			    sprint_no : sprint_no
+			    scrum_no : <%=scrum_no%>
 			  });
 			  location.href='/taskboard/<%=project_list_no%>/0/<%=loginId%>';
   });
