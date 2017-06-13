@@ -67,6 +67,8 @@ exports.releasePlanning = function(request, response){
 			,function (errors, masterId){
 			client.query('select scrum_no from scrum where project_list_no = ?', [request.params.project_list_no]
 				,function (errors, scrum){
+				client.query('select max(sprint_no) as max from sprint where scrum_no = ?', scrum[0].scrum_no
+					,function (error3, sprintmax){
 				client.query('select * from category where scrum_no = ?',  scrum[0].scrum_no
 					,function (error, categoryResult){
 					client.query('select project_release_no from project_release where project_list_no = ?', [request.params.project_list_no]
@@ -77,10 +79,6 @@ exports.releasePlanning = function(request, response){
 								,function (error, name){			
 								client.query('select * from poker'
 									,function (error, poker){
-										console.log('릴리즈'+release[0].project_release_no);
-										console.log('리스트'+request.params.project_list_no);
-										console.log(storyResult);
-										console.log(categoryResult);
 									response.render('scrum/releasePlanning', {
 										project_list_no : request.params.project_list_no,
 										project_join_no : join[0].project_join_no,
@@ -88,10 +86,12 @@ exports.releasePlanning = function(request, response){
 										scrum_no : scrum[0].scrum_no,
 										storyData : storyResult,
 										categoryData : categoryResult,
+										Max : sprintmax[0].max,
 										masterId : masterId[0].user_no,
 										loginId : request.params.loginId,
 										username : name[0].name,
 										poker : poker
+										});
 									});
 								});
 							});

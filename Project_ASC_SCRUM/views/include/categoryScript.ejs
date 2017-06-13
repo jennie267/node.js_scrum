@@ -38,8 +38,8 @@
       $(line).appendTo(text);
       editCate();
       deleCate();
-      addCate();
 		};
+      addCate();
 	});
 		
 	function editCate() { 
@@ -101,7 +101,7 @@
 	function addCate(){
 		$('.addCategory').on('click', function(){
 			var text = $('#text').val();
-		
+			console.log('add');
 			if(text.trim().length > 0){
 				socket.emit('categoryAdd', {
 					scrum_no : <%=scrum_no%>,

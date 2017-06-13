@@ -22,7 +22,7 @@
         		<a href="/scrum/taskBoard"><img src="/images/menu/scrum.png" style="width: 50%"><span class="fa arrow"></span></a>
         		<ul class="nav nav-second-level">
         			<li>
-        				<a href="http://localhost:4567/taskBoard/<%=project_list_no%>/0/<%=loginId%>"><img src="/images/menu/task.png" style="width: 60%"></a>
+        				<a href="http://localhost:4567/taskBoard/<%=project_list_no%>/<%=Max%>/<%=loginId%>"><img src="/images/menu/task.png" style="width: 60%"></a>
         			</li>
         			<li>
         				<a href="http://localhost:4567/releasePlanning/<%=project_list_no%>/<%=loginId%>"><img src="/images/menu/release.png" style="width: 70%"></a>
@@ -49,9 +49,8 @@
 <!-- /.navbar-static-side -->
 </div>
 <script>
-
 	$('#dashBoard').on('click', function() {
-		location.href="http://localhost/project/dashBoard/"+<%=project_list_no%>+"/"+<%=loginId%>;
+		location.href="http://localhost/gantt/actionChart/"+<%=project_list_no%>+"/"+<%=loginId%>+"/go";
 	});
 	$('#ganttChart').on('click', function() {
 		location.href="http://localhost/gantt/ganttChart/"+<%=project_list_no%>+"/"+<%=loginId%>;

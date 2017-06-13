@@ -51,7 +51,9 @@
 			    scrum_no : <%=scrum_no%>,
 			 		sprint_no : sprint_no
 			 	});
-			 location.href='/taskboard/<%=project_list_no%>/0/<%=loginId%>';
+			 socket.on('sprintAdd', function (data){
+			 	location.href='http://localhost:4567/taskboard/<%=project_list_no%>/'+data.max+'/<%=loginId%>';
+			 });
   });		  
 		return false;
 	});
@@ -81,7 +83,9 @@
 			  socket.emit('sprintRemove', {
 			    scrum_no : <%=scrum_no%>
 			  });
-			  location.href='/taskboard/<%=project_list_no%>/0/<%=loginId%>';
+			  socket.on('sprintRemove', function (data){
+			 		location.href='http://localhost:4567/taskboard/<%=project_list_no%>/'+data.NewSprint+'/<%=loginId%>';
+			 });
   });
 		
 		return false;

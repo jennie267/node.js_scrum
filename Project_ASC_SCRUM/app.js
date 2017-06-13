@@ -75,13 +75,26 @@ io.sockets.on('connection', function (socket){
 		client.query('INSERT INTO sprint(sprint_no, scrum_no, start_date) VALUES (null, ?, now())', data.scrum_no);
 		client.query('select max(sprint_no) as mad from sprint where scrum_no = ?', data.scrum_no
 			,function (error1, result){
-				client.query('update sprint_back_log set sprint_no = ? where status < 2 and sprint_no = ?', [result[0].mad, data.sprint_no]);
+			client.query('update sprint_back_log set sprint_no = ? where status < 2 and sprint_no = ?', [result[0].mad, data.sprint_no]
+				,function (error2, sprint){
+				io.sockets.in(project_room0).emit('sprintAdd', {
+					max : result[0].mad
+				});
+			});
 		});
 	});
 	//스프린트 제거
 	socket.on('sprintRemove', function (data){
-		client.query('delete sprint where scrum_no = ?', data.scrum_no);
-		client.query('insert into sprint (sprint_no, scrum_no, start_date) values(null, ?, now())', data.scrum_no);
+		client.query('delete from sprint where scrum_no = ?', data.scrum_no);
+		client.query('insert into sprint (sprint_no, scrum_no, start_date) values(null, ?, now())', data.scrum_no
+			,function (error, result0){
+			client.query('select max(sprint_no) as mad from sprint where scrum_no = ?', data.scrum_no
+				,function (error1, result){
+				io.sockets.in(project_room0).emit('sprintRemove', {
+					NewSprint : result[0].mad
+				});
+			});
+		});
 	});
 	//스프린트 날짜 보기
 	socket.on('sprintDetail', function (data){
@@ -150,7 +163,7 @@ io.sockets.on('connection', function (socket){
 	socket.on('StoryDetail', function (data){
 		client.query('select * from user_story where user_story_no = ?'
 			, data.user_story_no, function (error, results){
-				io.sockets.emit('StoryDetail', {
+				io.sockets.in(project_room0).emit('StoryDetail', {
 					data : results
 				});
 			});
@@ -159,7 +172,7 @@ io.sockets.on('connection', function (socket){
 	socket.on('ModifyStoryLoad', function (data){
 		client.query('select * from user_story where user_story_no = ?'
 				, data.user_story_no, function (error, results){
-					io.sockets.emit('ModifyStoryLoad', {
+					io.sockets.in(project_room0).emit('ModifyStoryLoad', {
 						data : results
 					});
 				});
