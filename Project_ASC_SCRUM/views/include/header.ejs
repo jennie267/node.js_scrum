@@ -2,7 +2,7 @@
  <!-- Navigation -->
 	<nav class="navbar-default sidebar" role="navigation" style="background-color: #354555">
 		<div class="sidebar-nav navbar-collapse">
-  		<a href="http://192.168.0.62/lobby/selectProject"><img src="/images/logo.png" style="width:250px"></a>
+  		<a href="/lobby/selectProject"><img src="/images/logo.png" style="width:250px"></a>
     	<div class="row">
     		<div class="col-xs-2 col-sm-2">
 		  		<div><a data-toggle="modal" data-target="#modifyModal" class="profile"><img src="/images/noimage2.png"></a></div>
@@ -13,7 +13,7 @@
     	</div>
       	<ul class="nav" id="side-menu" style="margin-top: 15px">
       		<li>
-        		<a href="http://192.168.0.62/project/dashBoard?projectListNo=<%=project_list_no%>&userNo=<%=loginId%>"><img src="/images/menu/dashboard.png" style="width: 50%"></a>
+        		<a id='dashBoard'><img src="/images/menu/dashboard.png" style="width: 50%"></a>
         	</li>
         	<li>
         		<a href="/scrum/taskBoard"><img src="/images/menu/scrum.png" style="width: 50%"><span class="fa arrow"></span></a>
@@ -28,13 +28,13 @@
           	<!-- /.nav-second-level -->
         	</li>
         	<li>
-        		<a href="http://192.168.0.62/gantt/ganttChart?projectListNo=<%=project_list_no%>&userNo=<%=loginId%>"><img src="/images/menu/gantt.png" style="width: 50%"></a>
+        		<a id='ganttChart'><img src="/images/menu/gantt.png" style="width: 50%"></a>
         	</li>
         	<li>
-        		<a href="http://192.168.0.62/project/library?projectListNo=<%=project_list_no%>&userNo=<%=loginId%>"><img src="/images/menu/library.png" style="width: 50%"></a>
+        		<a id='library'><img src="/images/menu/library.png" style="width: 50%"></a>
         	</li>
         	<li>
-        		<a href="http://192.168.0.62/project/member?projectListNo=<%=project_list_no%>&userNo=<%=loginId%>"><img src="/images/menu/member.png" style="width: 50%"></a>
+        		<a id='member'><img src="/images/menu/member.png" style="width: 50%"></a>
         	</li>
         	<li>
         		<a href="#"><img src="/images/menu/log.png" style="width: 50%"></a>
@@ -49,4 +49,18 @@
 <!-- /.navbar-static-side -->
 </div>
 <script>
+
+	$('#dashBoard').on('click', function() {
+		location.href="/project/dashBoard/"+<%=project_list_no%>+"/"+<%=loginId%>;
+	});
+	$('#ganttChart').on('click', function() {
+		location.href="/gantt/ganttChart/"+<%=project_list_no%>+"/"+<%=loginId%>;
+	});
+	$('#library').on('click', function() {
+		location.href="/project/library/"+<%=project_list_no%>+"/"+<%=loginId%>;
+	});
+	$('#member').on('click', function() {
+		location.href="/project/member/"+<%=project_list_no%>;
+	});
+
 </script>
