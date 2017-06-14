@@ -78,8 +78,8 @@ io.sockets.on('connection', function (socket){
 		,function (error, project_name){
 		client.query('select name from users where user_no = ?', [data.loginId]
 			,function (error, user_name){
-			var content = '[' + project_name[0].project_name + ']';
-				content	+= user_name[0].name + ' : 태스크보드에서 스프린트를 추가했습니다.';
+			var content = '[' + project_name[0].project_name + '] ';
+				content	+= user_name[0].name + ' : 태스크보드에서 스프린트 를 추가했습니다.';
 			client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
 				, [data.loginId, data.project_release_no, content]);
 			
@@ -95,8 +95,8 @@ io.sockets.on('connection', function (socket){
 				, function (error, sprint_back){
 				console.log(sprint_back.length);
 				for(var i =0; i < sprint_back.length; i++){
-				var content = '[' + project_name[0].project_name + ']';
-					content	+= user_name[0].name + ' : 스크럼에서 스프린트백로그 '+ sprint_back[i].content + '을(를) 다음 스프린트로 넘겼습니다.';
+				var content = '[' + project_name[0].project_name + '] ';
+					content	+= user_name[0].name + ' : 스크럼에서 스프린트백로그 '+ sprint_back[i].content + ' 을(를) 다음 스프린트로 넘겼습니다.';
 			
 				client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
 					, [data.loginId, data.project_release_no, content]);
@@ -123,7 +123,7 @@ io.sockets.on('connection', function (socket){
 		,function (error, project_name){
 		client.query('select name from users where user_no = ?', [data.loginId]
 			,function (error, user_name){
-			var content = '[' + project_name[0].project_name + ']';
+			var content = '[' + project_name[0].project_name + '] ';
 				content	+= user_name[0].name + ' : 태스크보드에서 스프린트를 전체 제거했습니다.';
 			client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
 				, [data.loginId, data.project_release_no, content]);
@@ -136,7 +136,7 @@ io.sockets.on('connection', function (socket){
 		,function (error, project_name){
 		client.query('select name from users where user_no = ?', [data.loginId]
 			,function (error, user_name){
-			var content = '[' + project_name[0].project_name + ']';
+			var content = '[' + project_name[0].project_name + '] ';
 				content	+= user_name[0].name + ' : 태스크보드에서 스프린트를 추가했습니다.';
 			client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
 				, [data.loginId, data.project_release_no, content]);
@@ -181,8 +181,8 @@ io.sockets.on('connection', function (socket){
 			,function (error, project_name){
 			client.query('select name from users where user_no = ?', [data.loginId]
 				,function (error, user_name){
-				var content = '[' + project_name[0].project_name + ']';
-					content	+= user_name[0].name + ' : 스크럼에서 카테고리 '+ data.title + '을(를) 추가했습니다.';
+				var content = '[' + project_name[0].project_name + '] ';
+					content	+= user_name[0].name + ' : 스크럼에서 카테고리 '+ data.title + ' 을(를) 추가했습니다.';
 				client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
 					, [data.loginId, data.project_release_no, content]);
 				
@@ -200,8 +200,8 @@ io.sockets.on('connection', function (socket){
 				,function (error, user_name){
 				client.query('select title from category where category_no = ?', [data.category_no]
 					,function (error, title){	
-					var content = '[' + project_name[0].project_name + ']';
-					content	+= user_name[0].name + ' : 스크럼에서 카테고리 '+ title[0].title + '을(를) 삭제했습니다.';
+					var content = '[' + project_name[0].project_name + '] ';
+					content	+= user_name[0].name + ' : 스크럼에서 카테고리 '+ title[0].title + ' 을(를) 삭제했습니다.';
 					
 					client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
 					, [data.loginId, data.project_release_no, content]);
@@ -219,8 +219,8 @@ io.sockets.on('connection', function (socket){
 		,function (error, project_name){
 		client.query('select name from users where user_no = ?', [data.loginId]
 			,function (error, user_name){
-				var content = '[' + project_name[0].project_name + ']';
-				content	+= user_name[0].name + ' : 스크럼에서 카테고리 '+ data.title + '을(를) 수정했습니다.';
+				var content = '[' + project_name[0].project_name + '] ';
+				content	+= user_name[0].name + ' : 스크럼에서 카테고리 '+ data.title + ' 을(를) 수정했습니다.';
 				
 				client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
 				, [data.loginId, data.project_release_no, content]);
@@ -249,8 +249,8 @@ io.sockets.on('connection', function (socket){
 			,function (error, project_name){
 			client.query('select name from users where user_no = ?', [data.loginId]
 				,function (error, user_name){
-				var content = '[' + project_name[0].project_name + ']';
-				content	+= user_name[0].name + ' : 태스크보드에서 유저스토리 '+ data.title + '을(를) 추가했습니다.';
+				var content = '[' + project_name[0].project_name + '] ';
+				content	+= user_name[0].name + ' : 태스크보드에서 유저스토리 '+ data.title + ' 을(를) 추가했습니다.';
 				
 				client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
 				, [data.loginId, data.project_release_no, content]);
@@ -269,8 +269,8 @@ io.sockets.on('connection', function (socket){
 				,function (error, user_name){
 				client.query('select title from user_story where user_story_no = ?', data.user_story_no
 					,function (error, title){	
-					var content = '[' + project_name[0].project_name + ']';
-					content	+= user_name[0].name + ' : 태스크보드에서 유저스토리 '+ title[0].title + '을(를) 삭제했습니다.';
+					var content = '[' + project_name[0].project_name + '] ';
+					content	+= user_name[0].name + ' : 태스크보드에서 유저스토리 '+ title[0].title + ' 을(를) 삭제했습니다.';
 				
 					client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
 					, [data.loginId, data.project_release_no, content]);
@@ -308,8 +308,8 @@ io.sockets.on('connection', function (socket){
 				,function (error, user_name){
 				client.query('select title from user_story where user_story_no = ?', data.user_story_no
 					,function (error, title){	
-					var content = '[' + project_name[0].project_name + ']';
-					content	+= user_name[0].name + ' : 태스크보드에서 유저스토리 '+ data.title + '을(를) 수정했습니다.';
+					var content = '[' + project_name[0].project_name + '] ';
+					content	+= user_name[0].name + ' : 태스크보드에서 유저스토리 '+ data.title + ' 을(를) 수정했습니다.';
 			
 					client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
 					, [data.loginId, data.project_release_no, content]);
@@ -357,7 +357,7 @@ io.sockets.on('connection', function (socket){
 				,function (error, user_name){
 				client.query('select title from user_story where user_story_no = ?', data.user_story_no
 					,function (error, user_story){
-					var content = '[' + project_name[0].project_name + ']';
+					var content = '[' + project_name[0].project_name + '] ';
 					content	+= user_name[0].name + ' : 릴리즈플래닝에서  '+ user_story[0].title + '의 플래닝포커를 결정했습니다.';
 			
 					client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
@@ -411,8 +411,8 @@ io.sockets.on('connection', function (socket){
 			,function (error, project_name){
 			client.query('select name from users where user_no = ?', [data.loginId]
 				,function (error, user_name){
-				var content = '[' + project_name[0].project_name + ']';
-				content	+= user_name[0].name + ' : 태스크보드에서 투두 '+ data.content + '을(를) 추가했습니다.';
+				var content = '[' + project_name[0].project_name + '] ';
+				content	+= user_name[0].name + ' : 태스크보드에서 투두 '+ data.content + ' 을(를) 추가했습니다.';
 			
 				client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
 				, [data.loginId, data.project_release_no, content]);
@@ -462,8 +462,8 @@ io.sockets.on('connection', function (socket){
 			,function (error, project_name){
 				client.query('select name from users where user_no = ?', [data.loginId]
 				,function (error, user_name){
-					var content = '[' + project_name[0].project_name + ']';
-					content	+= user_name[0].name + ' : 태스크보드에서 투두 '+ data.content + '을(를) 수정했습니다.';
+					var content = '[' + project_name[0].project_name + '] ';
+					content	+= user_name[0].name + ' : 태스크보드에서 투두 '+ data.content + ' 을(를) 수정했습니다.';
 					
 					client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
 							, [data.loginId, data.project_release_no, content]);
@@ -478,8 +478,8 @@ io.sockets.on('connection', function (socket){
 			,function (error, project_name){
 				client.query('select name from users where user_no = ?', [data.loginId]
 				,function (error, user_name){
-					var content = '[' + project_name[0].project_name + ']';
-					content	+= user_name[0].name + ' : 태스크보드에서 투두 '+ data.content + '을(를) 수정했습니다.';
+					var content = '[' + project_name[0].project_name + '] ';
+					content	+= user_name[0].name + ' : 태스크보드에서 투두 '+ data.content + ' 을(를) 수정했습니다.';
 					
 					client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
 							, [data.loginId, data.project_release_no, content]);
@@ -528,8 +528,8 @@ io.sockets.on('connection', function (socket){
 			,function (error, user_name){
 				client.query('select content from sprint_back_log where sprint_back_log_no =?', data.sprint_back_log_no
 				,function (error, sprint_back){
-					var content = '[' + project_name[0].project_name + ']';
-					content	+= user_name[0].name + ' : 태스크보드에서 투두 '+ sprint_back[0].content + '을(를) 수정했습니다.';
+					var content = '[' + project_name[0].project_name + '] ';
+					content	+= user_name[0].name + ' : 태스크보드에서 투두 '+ sprint_back[0].content + ' 을(를) 수정했습니다.';
 				
 					client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
 							, [data.loginId, data.project_release_no, content]);
@@ -546,8 +546,8 @@ io.sockets.on('connection', function (socket){
 				,function (error, user_name){
 					client.query('select content from sprint_back_log where sprint_back_log_no =?', data.sprint_back_log_no
 					,function (error, sprint_back){
-						var content = '[' + project_name[0].project_name + ']';
-						content	+= user_name[0].name + ' : 태스크보드에서 투두 '+ sprint_back[0].content + '을(를) 수정했습니다.';
+						var content = '[' + project_name[0].project_name + '] ';
+						content	+= user_name[0].name + ' : 태스크보드에서 투두 '+ sprint_back[0].content + ' 을(를) 수정했습니다.';
 					
 						client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
 							, [data.loginId, data.project_release_no, content]);
@@ -567,8 +567,8 @@ io.sockets.on('connection', function (socket){
 				,function (error, user_name){
 				client.query('select content from sprint_back_log where sprint_back_log_no = ?', data.sprint_back_log_no
 					,function (error, title){	
-					var content = '[' + project_name[0].project_name + ']';
-					content	+= user_name[0].name + ' : 태스크보드에서 투두 '+ title[0].content + '을(를) 삭제했습니다.';
+					var content = '[' + project_name[0].project_name + '] ';
+					content	+= user_name[0].name + ' : 태스크보드에서 투두 '+ title[0].content + ' 을(를) 삭제했습니다.';
 			
 					client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
 							, [data.loginId, data.project_release_no, content]);
@@ -590,7 +590,7 @@ io.sockets.on('connection', function (socket){
 				,function (error, user_name){
 				client.query('select title from user_story where user_story_no = ?', data.user_story_no
 					,function (error, user_story){
-					var content = '[' + project_name[0].project_name + ']';
+					var content = '[' + project_name[0].project_name + '] ';
 					content	+= user_name[0].name + ' : 릴리즈플래닝에서  '+ user_story[0].title + '의 플래닝포커를 시행했습니다.';
 				
 					client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'

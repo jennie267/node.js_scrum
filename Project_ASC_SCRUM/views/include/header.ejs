@@ -37,7 +37,7 @@
         		<a id='member'><img src="/images/menu/member.png" style="width: 50%"></a>
         	</li>
         	<li>
-        		<a href="#"><img src="/images/menu/log.png" style="width: 50%"></a>
+        		<a id="log"><img src="/images/menu/log.png" style="width: 50%"></a>
         	</li>
         	<li>
         		<a><img src="/images/menu/logout.png"  class="logoutBtn"  style="width: 50%; cursor: pointer;"></a>
@@ -60,6 +60,9 @@
 	});
 	$('#member').on('click', function() {
 		location.href="http://localhost/project/member/"+<%=project_list_no%>;
+	});
+	$('#log').on('click', function() {
+		location.href="http://localhost/project/log/"+<%=project_list_no%>+"/"+<%=loginId%>;
 	});
 
 </script>
