@@ -118,13 +118,15 @@
     		} else {
     			socket.emit('ThrowOut', {
 						sprint_back_log_no : drag_no,
-						status : ev.target.id
+						status : ev.target.id,
+						project_release_no : <%=project_release_no%>,
+						loginId : <%=loginId%>
 					});
+    			todoLi();
     		}
     		
     		parent='';
     		drag_no = 0;
-    		todoLi();
 			}
 			todoLi();
 		//투두 등록--------------------------------------------
@@ -197,7 +199,9 @@
 					sprint_no : <%=Max%>,
 					user_story_no : story,
 					user_no : user_no,
-					content : content
+					content : content,
+					project_release_no : <%=project_release_no%>,
+					loginId : <%=loginId%>
 				});
 				$(registTodoModal).modal('hide');
 				$('.DoStory').val('');
@@ -294,7 +298,9 @@
 						}
 						socket.emit('ThrowOut', {
 							sprint_back_log_no : $('.detailBackLogNo').val(),
-							status : statusSet
+							status : statusSet,
+							project_release_no : <%=project_release_no%>,
+							loginId : <%=loginId%>
 						});
 						$(detailTodoModal).modal('hide');
 						/** 태스크 새로고침 */
@@ -313,7 +319,9 @@
 						}
 						socket.emit('ThrowOut', {
 							sprint_back_log_no : $('.detailBackLogNo').val(),
-							status : statusSet
+							status : statusSet,
+							project_release_no : <%=project_release_no%>,
+							loginId : <%=loginId%>
 						});
 						$(detailTodoModal).modal('hide');
 						/** 태스크 새로고침 */
@@ -420,7 +428,9 @@
 					user_story_no : $('#DoModifyStory').val(),
 					user_no : $('#DoModifyWorker').val(),
 					content : content,
-					status : $('#DoStatus').val()
+					status : $('#DoStatus').val(),
+					project_release_no : <%=project_release_no%>,
+					loginId : <%=loginId%>
 				});
 				$(modifyTodoModal).modal('hide');
 				$('#sprint_no').val('');
@@ -442,7 +452,9 @@
 				e.preventDefault();
 				var push = $(this).attr('value');
 				socket.emit('DoDelete', {
-					sprint_back_log_no : push
+					sprint_back_log_no : push,
+					project_release_no : <%=project_release_no%>,
+					loginId : <%=loginId%>
 				});
 				
 				/** 모든곳에 새로고침을 달아야함 추가 / 수정 / 삭제 */

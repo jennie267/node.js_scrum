@@ -199,7 +199,9 @@
 		if($('.VotePeople').val() == $('.AllPeople').val()){
 			socket.emit('StorySetScore', {
 				user_story_no : $('.PokerStory').val(),
-				working_time : $('.ScoreAdd').val()
+				working_time : $('.ScoreAdd').val(),
+				project_release_no : <%=project_release_no%>,
+				loginId : <%=loginId%>
 			});
 			$('.PokerStory').val('');
 			$('.ScoreAdd').val('');
@@ -297,7 +299,7 @@
 			if(scoreSet.trim().length > 0){
 				socket.emit('PokerFind', {
 					user_story_no : $('.PokerStory').val(),
-					user_no : $('.PokerUser').val(),
+					user_no : $('.PokerUser').val()
 				});
 		
 				socket.on('PokerFind', function (data){
@@ -326,7 +328,9 @@
 			socket.emit('PokerAdd', {
 				user_story_no : $('.PokerStory').val(),
 				user_no : $('.PokerUser').val(),
-				score : $('.inputScore').val()
+				score : $('.inputScore').val(),
+				project_release_no : <%=project_release_no%>,
+				loginId : <%=loginId%>
 			});
 		
 			$('.PokerStory').val('');

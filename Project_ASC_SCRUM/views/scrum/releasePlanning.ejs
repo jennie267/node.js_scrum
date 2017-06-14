@@ -83,7 +83,7 @@
 											<%});%>
 											<%if(check==1){%><td class='pokerDone'>
 											<%} else {%><td class='pokerToDo'><%}%>
-										<%}%>
+										<%} else {%><td class='pokerToDo'><%}%>
 									<%}%>
 										<%if(masterId != loginId){%>
 										<a class='DetailPoker' value=<%=item1.user_story_no%> data-toggle="modal" data-target="#planningPokerModal">
@@ -100,6 +100,9 @@
   </div>
 </div>
 <script>
+console.log(<%=storyData.length%>);
+console.log(<%=categoryData.length%>);
+console.log(<%=poker.length%>);
 </script>
 <!-- footer -->  
 <% include ../include/footer.ejs%>

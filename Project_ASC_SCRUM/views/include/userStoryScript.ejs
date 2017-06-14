@@ -49,7 +49,9 @@
 				e.preventDefault();
 				var push = $(this).attr('value');
 				socket.emit('StoryDelete', {
-					user_story_no : push
+					user_story_no : push,
+					project_release_no : <%=project_release_no%>,
+					loginId : <%=loginId%>
 				});
 				
 				/** 모든곳에 새로고침을 달아야함 추가 / 수정 / 삭제 */
@@ -176,7 +178,8 @@
 				as_a : as_a,
 				i_want : i_want,
 				so_that : so_that,
-				priority : $('#Priority').val()
+				priority : $('#Priority').val(),
+				loginId : <%=loginId%>
 			});
 			$(registUserStoryModal).modal('hide');
 			$('#StoryCateList').val('');
@@ -185,6 +188,7 @@
 			$('#IWant').val('');
 			$('#SoThat').val('');
 			/** 태스크 새로고침 */
+			location.reload();
 			StoryLi();
 		}else {
 				swal('빈칸을 모두 채워주세요')
@@ -211,7 +215,8 @@
 					as_a : $('.ModifyStoryAs_a').val(),
 					i_want : $('.ModifyStoryI_want').val(),
 					so_that : $('.ModifyStorySo_That').val(),
-					priority : $('.ModifyStoryPriority').val()
+					priority : $('.ModifyStoryPriority').val(),
+					loginId : <%=loginId%>
 				});
 				
 				$(modifyUserStoryModal).modal('hide');

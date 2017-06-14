@@ -41,7 +41,7 @@
 		};
       addCate();
 	});
-		
+	var originText = '';
 	function editCate() { 
 		//설정 한다 수정!!
 		$('.editCate').on('click', function(e) {
@@ -58,7 +58,7 @@
 				
 			//글을 쓴다
 			var text = $(this).parent().parent().next().next().children().children();
-				
+			originText = $(text).val();	
 			//채팅 속성 설정
 			text.removeAttr('disabled');
 			text.removeAttr('style');
@@ -85,7 +85,10 @@
 				//수정수정
 				socket.emit('categoryEdit', {
 					title : text,
-					category_no : no
+					category_no : no,
+					originText : originText,
+					project_release_no : <%=project_release_no%>,
+					loginId : <%=loginId%>
 				});
 				
 				/** 모든곳에 새로고침을 달아야함 추가 / 수정 / 삭제 */
@@ -101,12 +104,12 @@
 	function addCate(){
 		$('.addCategory').on('click', function(){
 			var text = $('#text').val();
-			console.log('add');
 			if(text.trim().length > 0){
 				socket.emit('categoryAdd', {
 					scrum_no : <%=scrum_no%>,
 					project_release_no : <%=project_release_no%>,
-					title : text
+					title : text,
+					loginId : <%=loginId%>
 				});
 			} else {
 					swal('빈칸을 모두 채워주세요');
@@ -122,7 +125,9 @@
 			var push = $(this).attr('value');
 			
 			socket.emit('categoryDelete', {
-				category_no : push
+				category_no : push,
+				project_release_no : <%=project_release_no%>,
+				loginId : <%=loginId%>
 			});
 			
 			/** 모든곳에 새로고침을 달아야함 추가 / 수정 / 삭제 */
