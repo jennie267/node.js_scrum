@@ -2,10 +2,10 @@
  <!-- Navigation -->
 	<nav class="navbar-default sidebar" role="navigation" style="background-color: #354555">
 		<div class="sidebar-nav navbar-collapse">
-  		<a href="http://localhost/lobby/selectProject"><img src="/images/logo.png" style="width:250px"></a>
+  		<a href="http://52.78.100.100:80/lobby/selectProject"><img src="http://52.78.100.100:80/resources/images/logo.png" style="width:250px"></a>
     	<div class="row">
     		<div class="col-xs-2 col-sm-2">
-		  		<div><a data-toggle="modal" data-target="#modifyModal" class="profile"><img src="/images/noimage2.png"></a></div>
+		  		<div><a data-toggle="modal" data-target="#modifyModal" class="profile"><img src="http://52.78.100.100:80/resources/images/upload"></a></div>
       	</div>
       	<div class="col-xs-10 col-sm-10">
 		  		<p style="color: white; font-size: 30px; text-align: center; margin-top: 10px"><%=username%></p>
@@ -22,10 +22,10 @@
         		<a href="/scrum/taskBoard"><img src="/images/menu/scrum.png" style="width: 50%"><span class="fa arrow"></span></a>
         		<ul class="nav nav-second-level">
         			<li>
-        				<a href="http://localhost:4567/taskBoard/<%=project_list_no%>/<%=Max%>/<%=loginId%>"><img src="/images/menu/task.png" style="width: 60%"></a>
+        				<a href="http://52.78.100.100:4567/taskBoard/<%=project_list_no%>/<%=Max%>/<%=loginId%>"><img src="/images/menu/task.png" style="width: 60%"></a>
         			</li>
         			<li>
-        				<a href="http://localhost:4567/releasePlanning/<%=project_list_no%>/<%=loginId%>"><img src="/images/menu/release.png" style="width: 70%"></a>
+        				<a href="http://52.78.100.100:4567/releasePlanning/<%=project_list_no%>/<%=loginId%>"><img src="/images/menu/release.png" style="width: 70%"></a>
         			</li>
       			</ul>
           	<!-- /.nav-second-level -->
@@ -50,19 +50,19 @@
 </div>
 <script>
 	$('#dashBoard').on('click', function() {
-		location.href="http://localhost/gantt/actionChart/"+<%=project_list_no%>+"/"+<%=loginId%>+"/go";
+		location.href="http://52.78.100.100:80/gantt/actionChart/"+<%=project_list_no%>+"/"+<%=loginId%>+"/go";
 	});
 	$('#ganttChart').on('click', function() {
-		location.href="http://localhost/gantt/ganttChart/"+<%=project_list_no%>+"/"+<%=loginId%>;
+		location.href="http://52.78.100.100:80/gantt/ganttChart/"+<%=project_list_no%>+"/"+<%=loginId%>;
 	});
 	$('#library').on('click', function() {
-		location.href="http://localhost/project/library/"+<%=project_list_no%>+"/"+<%=loginId%>;
+		location.href="http://52.78.100.100:80/project/library/"+<%=project_list_no%>+"/"+<%=loginId%>;
 	});
 	$('#member').on('click', function() {
-		location.href="http://localhost/project/member/"+<%=project_list_no%>;
+		location.href="http://52.78.100.100:80/project/member/"+<%=project_list_no%>;
 	});
 	$('#log').on('click', function() {
-		location.href="http://localhost/project/log/"+<%=project_list_no%>+"/"+<%=loginId%>;
+		location.href="http://52.78.100.100:80/project/log/"+<%=project_list_no%>+"/"+<%=loginId%>;
 	});
 
 </script>

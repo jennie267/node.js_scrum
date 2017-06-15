@@ -115,23 +115,18 @@
 	/*채팅창 팝업*/
 	$(function() {
 		$("#chatBtn").click(function() {
-            /* $('html, body').animate({
-                scrollTop : 0
-            }, 400);
-            return false; */
-            popupOpen();
+            socket.emit('ChatOn', {
+							project_list_no : <%=project_list_no%>
+						});
+						socket.on('ChatOn', function(data){
+							popupOpen(data.chat);
+						});
+            
         });
         
-        var chatName = $("#chatName").val();
-	
-	
 	function popupOpen() {
 
-		var popUrl = "http://localhost:3000/chats/" + chatName; //팝업창에 출력될 페이지 URL
-    		
-    		//var popUrl = "http://www.naver.com";
-    		
-    		console.log(popUrl);
+		var popUrl = "http://52.78.100.100:3000/chats/" + chatName; //팝업창에 출력될 페이지 URL
     		
     		var cw = screen.availWidth; // 화면너비
     		var ch = screen.availHeight; // 화면높이
@@ -230,10 +225,6 @@
 		var poker = data.poker;
 		var user = data.user;
 		var list = data.list;
-		
-		console.log(poker);
-		console.log(user);
-		console.log(list);
 		
 		$('.ScoreHere').html('');
 		var ScoreHere = $('.ScoreHere');

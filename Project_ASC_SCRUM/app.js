@@ -651,6 +651,16 @@ io.sockets.on('connection', function (socket){
 	});
 	//Project_Join_List Fin
 	//Release Fin ->> 전용
+	//채팅 방 Srt
+	socket.on('ChatOn', function (data){
+		client.query('select chat_name as chat from project_list where project_list_no = ?', data.project_list_no
+			,function (error, result){
+			io.sockets.in(project_room1).emit('ChatOn', {
+				chat : result[0].chat
+		    });
+		});
+	});
+	//채팅 방 Fin 
 });
 
 server.listen(port,function(){

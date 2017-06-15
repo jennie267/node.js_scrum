@@ -29,25 +29,18 @@
 	
 	$(function() {
         $("#chatBtn").click(function() {
-        	var projectListNo = location.pathname.split('/')[3];
-			$.ajax({
-				url : "/project/getChatName",
-				type : "POST",
-				data : {
-					projectListNo : projectListNo
-				},
-				success : function(data) {
-					popupOpen(data);
-				}
-			});
-		});
+					socket.emit('ChatOn', {
+						project_list_no : <%=project_list_no%>
+					});
+					socket.on('ChatOn', function(data){
+						popupOpen(data.chat);
+					});
+				});
 	});
 	/*채팅창 팝업*/
 	function popupOpen(chatName) {
-		var popupUrl = "http://localhost:3000/chats/" + chatName;
+		var popupUrl = "http://52.78.100.100:3000/chats/" + chatName;
 		var popUrl = popupUrl; //팝업창에 출력될 페이지 URL
-
-		//var popUrl = "http://www.naver.com";
 
 		var cw = screen.availWidth; // 화면너비
 		var ch = screen.availHeight; // 화면높이
