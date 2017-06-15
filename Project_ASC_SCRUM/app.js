@@ -37,6 +37,7 @@ app.get('/releasePlanning/:project_list_no/:loginId', scrum.releasePlanning);
 var rooms = {};
 var project_room0;
 var project_room1;
+var project_room2;
 
 io.sockets.on('connection', function (socket){
 
@@ -56,10 +57,19 @@ io.sockets.on('connection', function (socket){
 		socket.join(socket.project_list_no+'/'+socket.sprint_no);
 		console.log(io.sockets.adapter.rooms);
 	});
+	socket.on('join2', function(project_list_no, roomName){
+		socket.roomName = roomName;
+		
+		project_room2 = socket.project_list_no+'/'+roomName;
+		
+		socket.join(socket.project_list_no+'/'+socket.roomName);
+		console.log(io.sockets.adapter.rooms);
+	});
 	
 	socket.on('disconnect',function(){
 		socket.leave(socket.project_list_no);
 		socket.leave(socket.project_list_no+'/'+socket.sprint_no);
+		socket.leave(socket.project_list_no+'/'+socket.roomName);
 	});
 	
 	
@@ -651,16 +661,6 @@ io.sockets.on('connection', function (socket){
 	});
 	//Project_Join_List Fin
 	//Release Fin ->> 전용
-	//채팅 방 Srt
-	socket.on('ChatOn', function (data){
-		client.query('select chat_name as chat from project_list where project_list_no = ?', data.project_list_no
-			,function (error, result){
-			io.sockets.in(project_room0).emit('ChatOn', {
-				chat : result[0].chat
-		    });
-		});
-	});
-	//채팅 방 Fin 
 });
 
 server.listen(port,function(){
