@@ -156,7 +156,7 @@
             	<div class="col-xs-10 col-xs-offset-1 text-center">
               	<div class="huge">User Story 
               	<%if(category.length > 0){%>
-              	<a class="fa fa-plus-circle registUser" data-toggle="modal" data-target="#registUserStoryModal"></a>
+              	<a style="cursor:pointer" class="fa fa-plus-circle registUser" data-toggle="modal" data-target="#registUserStoryModal"></a>
             		<%} else {}%>
             		</div>
             	</div>
@@ -170,15 +170,15 @@
         	<div class="panel-heading">
           	<div class="row">
             	<div class="col-xs-10 col-xs-offset-1 text-center">
-              	<div class="huge">To Do <a class="
+              	<div class="huge">To Do <a class="ToDoMaking
               	<!-- 선택 값에 따른 추가 버튼 생성 -->
               	<%if(storyData.length > 0){%>
               		<%if(currentsprint == Max || maxsprint == Max){%> 
-              			fa fa-plus-circle 
+              			fa fa-plus-circle" style="cursor:pointer;
               		<%}else {}%>
               	<%} else {}%>
               	<!-- 선택 값에 따른 추가 버튼 생성 -->
-              	ToDoMaking" id='ToDoMaking' data-toggle="modal" data-target="#registTodoModal"></a></div>
+              	" id='ToDoMaking' data-toggle="modal" data-target="#registTodoModal"></a></div>
             	</div>
           	</div>
         	</div>

@@ -1,5 +1,5 @@
 /**
- * 외부모듈
+r * 외부모듈
  */
 var express = require('express')
  , session = require('express-session')
@@ -655,7 +655,7 @@ io.sockets.on('connection', function (socket){
 	socket.on('ChatOn', function (data){
 		client.query('select chat_name as chat from project_list where project_list_no = ?', data.project_list_no
 			,function (error, result){
-			io.sockets.in(project_room1).emit('ChatOn', {
+			io.sockets.in(project_room0).emit('ChatOn', {
 				chat : result[0].chat
 		    });
 		});

@@ -75,15 +75,15 @@
 						<%if(item0.category_no == item1.category_no){%>
 								<tr>
 									<%if(item1.working_time > 0){%>
-										<td class='pokerAllDone'>
+										<td style='cursor:pointer' class='pokerAllDone'>
 									<%} else {%>
 										<%if(poker.length > 0){ var check=0;%>
 											<% poker.forEach(function (item2,i){%>
 												<% if(item2.user_story_no == item1.user_story_no){check=1;}%>
 											<%});%>
-											<%if(check==1){%><td class='pokerDone'>
-											<%} else {%><td class='pokerToDo'><%}%>
-										<%} else {%><td class='pokerToDo'><%}%>
+											<%if(check==1){%><td style='cursor:pointer' class='pokerDone'>
+											<%} else {%><td style='cursor:pointer' class='pokerToDo'><%}%>
+										<%} else {%><td style='cursor:pointer' class='pokerToDo'><%}%>
 									<%}%>
 										<%if(masterId != loginId){%>
 										<a class='DetailPoker' value=<%=item1.user_story_no%> data-toggle="modal" data-target="#planningPokerModal">
@@ -100,9 +100,6 @@
   </div>
 </div>
 <script>
-console.log(<%=storyData.length%>);
-console.log(<%=categoryData.length%>);
-console.log(<%=poker.length%>);
 </script>
 <!-- footer -->  
 <% include ../include/footer.ejs%>
