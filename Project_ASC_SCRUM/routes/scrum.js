@@ -70,6 +70,8 @@ exports.taskboard = function(request, response){
 	});
 };
 exports.releasePlanning = function(request, response){
+	var cookie = request.cookies;
+	var photo = request.cookies.photoCookie;
 	client.query('select project_join_no from project_list where project_list_no = ?',[request.params.project_list_no]
 		, function (error0, join){
 		client.query('select user_no from project_join_list where project_join_no = ?',[join[0].project_join_no]
@@ -102,7 +104,8 @@ exports.releasePlanning = function(request, response){
 												loginId : request.params.loginId,
 												username : name[0].name,
 												poker : poker,
-												chat : chat[0].chat
+												chat : chat[0].chat,
+												photo : photo
 											});
 										});
 									});
