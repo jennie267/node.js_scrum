@@ -9,6 +9,8 @@ var client = mysql.createConnection({
 });
 
 exports.taskboard = function(request, response){
+	var cookie = request.cookies;
+	var photo = request.cookies.photoCookie;
 	client.query('select scrum_no from scrum where project_list_no = ?', [request.params.project_list_no]
 		,function (error0, scrum){
 		client.query('select project_release_no from project_release where project_list_no = ?', [request.params.project_list_no]
@@ -38,7 +40,8 @@ exports.taskboard = function(request, response){
 											category : category,
 											loginId : request.params.loginId,
 											username : name[0].name,
-											chat : chat[0].chat
+											chat : chat[0].chat,
+											photo : photo
 										});
 									} else {
 										response.render('scrum/taskBoard', {
@@ -53,7 +56,8 @@ exports.taskboard = function(request, response){
 											category : category,
 											loginId : request.params.loginId,
 											username : name[0].name,
-											chat : chat[0].chat
+											chat : chat[0].chat,
+											photo : photo
 										});
 									}
 								});
