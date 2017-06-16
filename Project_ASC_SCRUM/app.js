@@ -382,7 +382,7 @@ io.sockets.on('connection', function (socket){
 	//UserStory Fin ->> 전용
 	
 	//ToDo Srt ->> 전용
-	//투두 전체 조회
+	//스프린트 백로그 전체 조회
 	socket.on('ToDoList', function (data){
 		client.query('select * from sprint_back_log where sprint_no = ?' 
 			,data.sprint_no,	function (error, results){
@@ -391,7 +391,7 @@ io.sockets.on('connection', function (socket){
 		    });
 		});
 	});
-	//투두등록용 ->> 스토리 정보
+	//스프린트 백로그 등록용 ->> 스토리 정보
 	socket.on('DoStory', function (data){
 		client.query('select * from user_story where project_release_no = ?', data.project_release_no 
 			,function (error, results){
@@ -400,7 +400,7 @@ io.sockets.on('connection', function (socket){
 				});
 		});
 	});
-	//투두등록용 ->> 유저 정보
+	//스프린트 백로그 등록용 ->> 유저 정보
 	socket.on('DoUserList', function (data){
 		client.query('select project_join_no from project_list where project_list_no = ?',[data.project_list_no]
 			, function (error0, join){
@@ -415,14 +415,14 @@ io.sockets.on('connection', function (socket){
 			});
 		});
 	});
-	//투두 등록
+	//스프린트 백로그 등록
 	socket.on('DoAdd', function (data){
 		client.query('select project_name from project_list where project_list_no = ?',[data.project_release_no]
 			,function (error, project_name){
 			client.query('select name from users where user_no = ?', [data.loginId]
 				,function (error, user_name){
 				var content = '[' + project_name[0].project_name + '] ';
-				content	+= user_name[0].name + ' : 태스크보드에서 투두 '+ data.content + ' 을(를) 추가했습니다.';
+				content	+= user_name[0].name + ' : 태스크보드에서 스프린트 백로그 '+ data.content + ' 을(를) 추가했습니다.';
 			
 				client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
 				, [data.loginId, data.project_release_no, content]);
@@ -441,7 +441,7 @@ io.sockets.on('connection', function (socket){
 					});
 		});
 	});
-	//투두 수정용 ->> 유저스토리 정보
+	//스프린트 백로그 수정용 ->> 유저스토리 정보
 	socket.on('DoModifyStory', function (data){
 		client.query('select * from user_story where project_release_no = ?', data.project_release_no 
 			,function (error, results){
@@ -450,7 +450,7 @@ io.sockets.on('connection', function (socket){
 				});
 		});
 	});
-	//투두 수정용 ->> 유저정보
+	//스프린트 백로그 수정용 ->> 유저정보
 	socket.on('DoModify_Worker', function (data){
 		client.query('select project_join_no from project_list where project_list_no = ?',[data.project_list_no]
 			, function (error0, join){
@@ -465,44 +465,35 @@ io.sockets.on('connection', function (socket){
 			});
 		});
 	});
-	//투두 수정
+	//스프린트 백로그 수정
 	socket.on('DoModify', function (data){
-		if(data.status != 2){
 			client.query('select project_name from project_list where project_list_no = ?',[data.project_release_no]
 			,function (error, project_name){
 				client.query('select name from users where user_no = ?', [data.loginId]
 				,function (error, user_name){
 					var content = '[' + project_name[0].project_name + '] ';
-					content	+= user_name[0].name + ' : 태스크보드에서 투두 '+ data.content + ' 을(를) 수정했습니다.';
+					content	+= user_name[0].name + ' : 태스크보드에서 스프린트 백로그 '+ data.content + ' 을(를) 수정했습니다.';
 					
-					client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
+					if(data.status != 2){
+						client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
 							, [data.loginId, data.project_release_no, content]);
 					
-					client.query('update sprint_back_log set user_story_no = ?, user_no = ?, content = ?, status = ?, done_date = null where sprint_back_log_no = ?'
+						client.query('update sprint_back_log set user_story_no = ?, user_no = ?, content = ?, status = ?, done_date = null where sprint_back_log_no = ?'
 							, [data.user_story_no, data.user_no, 
-								data.content, data.status, data.sprint_back_log_no]);
-				});
-			});
-		} else {
-			client.query('select project_name from project_list where project_list_no = ?',[data.project_release_no]
-			,function (error, project_name){
-				client.query('select name from users where user_no = ?', [data.loginId]
-				,function (error, user_name){
-					var content = '[' + project_name[0].project_name + '] ';
-					content	+= user_name[0].name + ' : 태스크보드에서 투두 '+ data.content + ' 을(를) 수정했습니다.';
-					
-					client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
+							data.content, data.status, data.sprint_back_log_no]);
+					} else {
+						client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
 							, [data.loginId, data.project_release_no, content]);
-					
-					client.query('update sprint_back_log set user_story_no = ?, user_no = ?, content = ?, status = ?, done_date = now() where sprint_back_log_no = ?'
+						
+						client.query('update sprint_back_log set user_story_no = ?, user_no = ?, content = ?, status = ?, done_date = now() where sprint_back_log_no = ?'
 							, [data.user_story_no, data.user_no, 
-								data.content, data.status, data.sprint_back_log_no]);
+							data.content, data.status, data.sprint_back_log_no]);
+					}
 				});
 			});
-		}
 	});
-	//투두 상세
-	//투두 정보
+	//스프린트 백로그 상세
+	//스프린트 백로그 정보
 	socket.on('ToDoDetail', function (data){
 		client.query('select * from sprint_back_log where sprint_back_log_no = ?'
 			, data.sprint_back_log_no, function (error, results){
@@ -520,7 +511,7 @@ io.sockets.on('connection', function (socket){
 					});
 				});
 	});
-	//투두 상세용 ->> 작업자 정보
+	//스프린트 백로그 상세용 ->> 작업자 정보
 	socket.on('DoDetail_Worker', function (data){
 		client.query('select * from users where user_no = ?'
 				, data.user_no, function (error, results){
@@ -529,9 +520,8 @@ io.sockets.on('connection', function (socket){
 			});
 		});
 	});
-	//투두 상세용 ->> 버튼으로 위치 이동
+	//스프린트 백로그 ->> 드래그 & 드랍 / 버튼으로 위치 이동
 	socket.on('ThrowOut', function (data){
-		if(data.status != 2){
 		client.query('select project_name from project_list where project_list_no = ?',[data.project_release_no]
 		,function (error, project_name){
 			client.query('select name from users where user_no = ?', [data.loginId]
@@ -539,37 +529,26 @@ io.sockets.on('connection', function (socket){
 				client.query('select content from sprint_back_log where sprint_back_log_no =?', data.sprint_back_log_no
 				,function (error, sprint_back){
 					var content = '[' + project_name[0].project_name + '] ';
-					content	+= user_name[0].name + ' : 태스크보드에서 투두 '+ sprint_back[0].content + ' 을(를) 수정했습니다.';
+					content	+= user_name[0].name + ' : 태스크보드에서 스프린트 백로그 '+ sprint_back[0].content + ' 을(를) 수정했습니다.';
+					if(data.status != 2){
 				
-					client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
+						client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
 							, [data.loginId, data.project_release_no, content]);
 				
-					client.query('update sprint_back_log set status = ?, done_date = null where sprint_back_log_no =?'
+						client.query('update sprint_back_log set status = ?, done_date = null where sprint_back_log_no =?'
 							, [data.status, data.sprint_back_log_no]);
+					} else {
+						client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
+							, [data.loginId, data.project_release_no, content]);
+						
+						client.query('update sprint_back_log set status = ?, done_date = now() where sprint_back_log_no =?'
+							, [data.status, data.sprint_back_log_no]);
+					}
 				});
 			});
 		});
-		} else {
-			client.query('select project_name from project_list where project_list_no = ?',[data.project_release_no]
-			,function (error, project_name){
-				client.query('select name from users where user_no = ?', [data.loginId]
-				,function (error, user_name){
-					client.query('select content from sprint_back_log where sprint_back_log_no =?', data.sprint_back_log_no
-					,function (error, sprint_back){
-						var content = '[' + project_name[0].project_name + '] ';
-						content	+= user_name[0].name + ' : 태스크보드에서 투두 '+ sprint_back[0].content + ' 을(를) 수정했습니다.';
-					
-						client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
-							, [data.loginId, data.project_release_no, content]);
-					
-						client.query('update sprint_back_log set status = ?, done_date = now() where sprint_back_log_no =?'
-							, [data.status, data.sprint_back_log_no]);
-					});
-				});
-			});
-		}
 	});
-	//투두 삭제용
+	//스프린트 백로그 삭제용
 	socket.on('DoDelete', function (data){
 		client.query('select project_name from project_list where project_list_no = ?',[data.project_release_no]
 			,function (error, project_name){
@@ -578,7 +557,7 @@ io.sockets.on('connection', function (socket){
 				client.query('select content from sprint_back_log where sprint_back_log_no = ?', data.sprint_back_log_no
 					,function (error, title){	
 					var content = '[' + project_name[0].project_name + '] ';
-					content	+= user_name[0].name + ' : 태스크보드에서 투두 '+ title[0].content + ' 을(를) 삭제했습니다.';
+					content	+= user_name[0].name + ' : 태스크보드에서 스프린트 백로그 '+ title[0].content + ' 을(를) 삭제했습니다.';
 			
 					client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
 							, [data.loginId, data.project_release_no, content]);
