@@ -165,7 +165,7 @@
 		  confirmButtonText: 'YES',
 		  cancelButtonText: 'NO'
 		}).then(function () {
-			location.href = 'http://localhost/';
+			location.href = 'http://52.78.100.100:80';
 		})
 	  
   });
@@ -238,11 +238,12 @@
         ScoreList +=  	"<input type='text' class='col-xs-12 text-center' id='Poker_User'"
         ScoreList +=    "style='background-color:transparent; border:none; width: 100%; font-weight: bold; font-size: 17px;'"
         ScoreList +=    "disabled value='"
-        
         for(var j = 0; j < user.length; j++){
         	for(var k = 0; k < list.length; k++){
-        		if(poker[i].user_no == user[j].user_no == list[k].user_no){
+						if(poker[i].user_no == user[j].user_no){        
+        		if(user[j].user_no == list[k].user_no){
         			ScoreList += list[k].name;
+        		}
         		}
         	}
         }
