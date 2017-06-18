@@ -90,6 +90,7 @@
           $(todoLine).appendTo(ToDo);
           $(doingLine).appendTo(Doing);
           $(doneLine).appendTo(Done);
+          ModifyDoLi();
 				}	else {
 					ToDo.html('');
 					Doing.html('');
@@ -98,7 +99,7 @@
 				
           detailBtn();
           deleDo();
-					ModifyDoLi();
+					
 			});
 			
 			function allowDrop(ev) {
@@ -258,7 +259,6 @@
 				DoDetail_UserStory();
 				DoDetail_Worker();
 				DoModify_Change();
-				DoModify_Comp();
 		});
 		
 		//DoDetail_UserStory 불러오기
@@ -345,8 +345,8 @@
 						sprint_back_log_no : push
 					});
 					DoModify_Status();
-					DoModify_Worker();
 					DoModify_Comp();
+					DoModify_Worker();
 				});
 			};
 		//Story 불러서 넣기
@@ -436,13 +436,12 @@
 				$('#sprint_no').val('');
 				$('#DoModifyStory').val('');
 				$('#DoModifyWorker').val('');
-				$('#DoContent').val('');
 				$('#DoStatus').val('');
 				/** 태스크 새로고침 */
 				todoLi();
-			}else {
-				swal('빈칸을 모두 채워주세요')
-			}	
+			} else {
+				swal('공백을 채워주세요.');
+			}
 		});
 		}
 		//여기까지가 수정----------------------------------

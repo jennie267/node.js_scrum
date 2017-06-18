@@ -79,8 +79,10 @@ io.sockets.on('connection', function (socket){
 	socket.on('sprintAdd', function (data){
 		client.query('select max(sprint_no) as mad from sprint where scrum_no = ?', data.scrum_no
 			,function (error, results){
-			client.query('update sprint set end_date = now() where sprint_no = ?'
-				, results[0].mad);
+				
+				client.query('update sprint set end_date = now() where sprint_no = ?'
+						, results[0].mad);
+				
 		});
 		
 		
@@ -113,11 +115,20 @@ io.sockets.on('connection', function (socket){
 				}
 				
 				client.query('select max(sprint_no) as mad from sprint where scrum_no = ?', data.scrum_no
-						,function (error1, result){
-					client.query('update sprint_back_log set sprint_no = ? where status < 2 and sprint_no = ?', [result[0].mad, data.sprint_no]
-					,function (error2, sprint){
-						io.sockets.in(project_room0).emit('sprintAdd', {
-							max : result[0].mad
+					,function (error1, result){
+					client.query('select count(sprint_back_log_no) as count from sprint_back_log where sprint_no = ? and status < 2',data.sprint_no
+						,function (error, count){
+						client.query('update sprint_back_log set sprint_no = ? where status < 2 and sprint_no = ?', [result[0].mad, data.sprint_no]
+							,function (error2, sprint){
+						
+								//스프린트 추가시 투두 두잉 갯수 넘기기
+								client.query('update sprint set do_count = ? where sprint_no = ?', [count[0].count, result[0].mad]);
+								//스프린트 추가시 투두 두잉 갯수 넘기기
+						
+						
+								io.sockets.in(project_room0).emit('sprintAdd', {
+									max : result[0].mad
+								});
 						});
 					});
 				});
@@ -429,6 +440,11 @@ io.sockets.on('connection', function (socket){
 				
 				client.query('INSERT INTO sprint_back_log(sprint_back_log_no, sprint_no, user_story_no, user_no, content, status) values(null, ?, ?, ?, ?, 0)' 
 				,[data.sprint_no, data.user_story_no, data.user_no, data.content]);
+				
+				//추가구간  스프린트 카운트 +1
+				client.query('update sprint set do_count = do_count+1 where sprint_no = ?'
+			    , [data.sprint_no]);
+				//추가구간  스프린트 카운트 +1
 			});
 		});
 	});
@@ -562,8 +578,16 @@ io.sockets.on('connection', function (socket){
 					client.query('insert into log_list (log_list_no, user_no, project_list_no, content) values(null,?,?,CONCAT(?, "##", "(", DATE_FORMAT(NOW(),"%b %d %Y %h:%i %p"), ")" )  )'
 							, [data.loginId, data.project_release_no, content]);
 				
+					//삭제구간 스프린트 카운트 -1
+					client.query('select sprint_no from sprint_back_log where sprint_back_log_no = ?',data.sprint_back_log_no
+					,function (error, sprint){
+						client.query('update sprint set do_count = do_count-1 where sprint_no = ?'
+						, [sprint[0].sprint_no]);
+					});
+					//삭제구간 스프린트 카운트 -1
+					
 					client.query('delete from sprint_back_log where sprint_back_log_no = ?'		
-					, data.sprint_back_log_no);
+							, data.sprint_back_log_no);
 				});
 			});
 		});
