@@ -1,16 +1,20 @@
 <div id="header">
  <!-- Navigation -->
 	<nav class="navbar-default sidebar" role="navigation" style="background-color: #354555">
-		<div class="sidebar-nav navbar-collapse">
+		<div class="sidebar-nav navbar-collapse" id='myNavbar2'>
   		<a href="http://52.78.100.100:80/lobby/selectProject"><img src="http://52.78.100.100:80/resources/images/logo.png" style="width:250px"></a>
-    	<div class="row">
-    		<div class="col-xs-2 col-sm-2">
-		  		<div><a data-toggle="modal" data-target="#modifyModal" class="profile"><img src="http://52.78.100.100:80/resources/images/upload<%=photo%>"></a></div>
+    	
+    	<div class="row" id='modalWrapper'>
+    		<div class="col-xs-2 col-sm-2 padding-accpeted">
+		  		<div class="profile">
+		  			<img src="http://52.78.100.100:80/resources/images/upload<%=photo%>">
+		  		</div>
       	</div>
       	<div class="col-xs-10 col-sm-10">
-		  		<p style="color: white; font-size: 30px; text-align: center; margin-top: 10px"><%=username%></p>
+		  		<div style="color: white; font-size: 30px; text-align: center; margin-top: 10px"><%=username%></div>
 		  	</div>
     	</div>
+    	
       	<ul class="nav" id="side-menu" style="margin-top: 15px">
       		<li>
         		<a id='dashBoard'><img src="/images/menu/dashboard.png" style="width: 50%; cursor:pointer;" ></a>
