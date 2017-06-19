@@ -449,17 +449,29 @@
 		function deleDo() {
 			$('.delDo').on('click',	function(e) {
 				e.preventDefault();
-				var push = $(this).attr('value');
-				socket.emit('DoDelete', {
-					sprint_back_log_no : push,
-					project_release_no : <%=project_release_no%>,
-					loginId : <%=loginId%>
-				});
+					var push = $(this).attr('value');
+				swal({
+		  title: '삭제하시겠습니까?',
+		  type: 'warning',
+		  showCancelButton: true,
+		  confirmButtonColor: '#3085d6',
+		  cancelButtonColor: '#d33',
+		  confirmButtonText: '확인',
+		  cancelButtonText: '취소'
+		}).then(function () {
 				
-				/** 모든곳에 새로고침을 달아야함 추가 / 수정 / 삭제 */
-				$('.HereToToDo').html('');
-					todoLi();
+					socket.emit('DoDelete', {
+						sprint_back_log_no : push,
+						project_release_no : <%=project_release_no%>,
+						loginId : <%=loginId%>
+					});
+				
+					/** 모든곳에 새로고침을 달아야함 추가 / 수정 / 삭제 */
+					$('.HereToToDo').html('');
+						todoLi();
+					});
 				});
+				push = 0;
 			};
 		//여기까지가 삭제------------------------------------
 		//설정한다 초기세팅
