@@ -72,7 +72,7 @@
 		$('.Poker_Join_List').val('');
 		$('.Poker_Join_List').val(List);
 		
-		var ScoreAdd  = 0;		
+		var ScoreAdd  = parseFloat('0');		
 		if(score.length > 0){
 			for(var i = 0; i < score.length; i++){
 				if(score[i].score == 0.5){
@@ -328,7 +328,7 @@
 			location.reload();
 		} else {
 				swal({     
-					title: '투표가 완료되었습니다.',
+					title: '이미 투표를 진행하였습니다.',
         	type: 'warning',
         	confirmButtonText: '닫기'
       	})

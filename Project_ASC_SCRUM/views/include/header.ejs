@@ -19,6 +19,9 @@
         		<a id='ganttChart'><img src="/images/menu/gantt.png" style="width: 50%; cursor:pointer;"></a>
         	</li>
         	<li>
+            <a id="burnDown"><img src="/images/menu/burnDown.png" style="width: 50%"></a>
+					</li>
+        	<li>
         		<a href="/scrum/taskBoard"><img src="/images/menu/scrum.png" style="width: 50%; cursor:pointer;"><span class="fa arrow"></span></a>
         		<ul class="nav nav-second-level">
         			<li>
@@ -54,6 +57,9 @@
 	});
 	$('#ganttChart').on('click', function() {
 		location.href="http://52.78.100.100:80/gantt/ganttChart/"+<%=project_list_no%>+"/"+<%=loginId%>;
+	});
+	$('#burnDown').on('click', function() {
+		location.href="http://52.78.100.100:80/burnDown/"+<%=project_list_no%>+"/"+<%=loginId%>;
 	});
 	$('#library').on('click', function() {
 		location.href="http://52.78.100.100:80/project/library/"+<%=project_list_no%>+"/"+<%=loginId%>;
