@@ -404,7 +404,7 @@ io.sockets.on('connection', function (socket){
 	});
 	//스프린트 백로그 등록용 ->> 스토리 정보
 	socket.on('DoStory', function (data){
-		client.query('select * from user_story where project_release_no = ?', data.project_release_no 
+		client.query('select * from user_story where project_release_no = ? and working_time > 0', data.project_release_no 
 			,function (error, results){
 				socket.emit('DoStory', {
 					data : results
@@ -459,7 +459,7 @@ io.sockets.on('connection', function (socket){
 	});
 	//스프린트 백로그 수정용 ->> 유저스토리 정보
 	socket.on('DoModifyStory', function (data){
-		client.query('select * from user_story where project_release_no = ?', data.project_release_no 
+		client.query('select * from user_story where project_release_no = ? and working_time > 0', data.project_release_no 
 			,function (error, results){
 				socket.emit('DoModifyStory', {
 					data : results

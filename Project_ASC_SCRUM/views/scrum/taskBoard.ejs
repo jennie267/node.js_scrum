@@ -172,11 +172,15 @@
             	<div class="col-xs-10 col-xs-offset-1 text-center">
               	<div class="huge">To Do <a class="ToDoMaking
               	<!-- 선택 값에 따른 추가 버튼 생성 -->
-              	<%if(storyData.length > 0){%>
-              		<%if(currentsprint == Max || maxsprint == Max){%> 
+              	<%if(storyData.length > 0){ var exist = 0; %>
+              		<%storyData.forEach(function (item,sprint){%>
+              			<%if(item.working_time > 0){ exist= 1;}%>
+              		<%})%>	
+              		<%if(currentsprint == Max && exist == 1|| maxsprint == Max && exist == 1){%> 
               			fa fa-plus-circle" style="cursor:pointer;
               		<%}else {}%>
               	<%} else {}%>
+              
               	<!-- 선택 값에 따른 추가 버튼 생성 -->
               	" id='ToDoMaking' data-toggle="modal" data-target="#registTodoModal"></a></div>
             	</div>
