@@ -410,6 +410,13 @@
 		//Do 불러서 넣기
 			socket.on('DoModifyLoad', function (data){
 				var da = data.data[0];
+				if(da.status == 0){
+					$('.ModifyBackLogStatus').val('ToDo 수정');
+				} else if(da.status == 1){
+					$('.ModifyBackLogStatus').val('Doing 수정');
+				} else if(da.status == 2){
+					$('.ModifyBackLogStatus').val('Done 수정');
+				}
 				$('#sprint_no').val(da.sprint_back_log_no);
 				$('.DoModifyStory').val(da.user_story_no);
 				$('#DoContent').val(da.content);
