@@ -12,12 +12,10 @@
 		socket.emit('sprintDetail', {
 			sprint_no : sprint_no
 		});
-		console.log(sprint_no);
 	};
 	//스프린트 정보
 	socket.on('sprintDetail', function (data){
 		var da = data.sprint;
-		console.log('asd');
 		$('#start_date').val(da[0].start_date.substr(0,10));
 		$('#end_date').val(da[0].end_date.substr(0,10));
 	});		

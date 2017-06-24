@@ -103,7 +103,6 @@
 	function addCate(){
 		$('.addCategory').on('click', function(){
 			var text = $('#text').val();
-			console.log(text.trim().length);
 			if(text.trim().length > 0){
 				socket.emit('categoryAdd', {
 					scrum_no : <%=scrum_no%>,

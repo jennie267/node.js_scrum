@@ -428,7 +428,6 @@
 		function DoModify_Comp(){ 
 		$('.DoModifyComp').on('click', function(){
 			var content = $('#DoContent').val();
-			console.log($('#DoModifyStory').val());
 			if(content.trim().length > 0){
 				socket.emit('DoModify', {
 					sprint_back_log_no : $('#sprint_no').val(),

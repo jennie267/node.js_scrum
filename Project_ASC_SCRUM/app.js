@@ -47,7 +47,6 @@ io.sockets.on('connection', function (socket){
 		project_room0 = project_list_no;
 		
 		socket.join(socket.project_list_no);
-		console.log(io.sockets.adapter.rooms);
 	});
 	socket.on('join1', function(project_list_no, sprint_no){
 		socket.sprint_no = sprint_no;
@@ -55,7 +54,6 @@ io.sockets.on('connection', function (socket){
 		project_room1 = socket.project_list_no+'/'+sprint_no;
 		
 		socket.join(socket.project_list_no+'/'+socket.sprint_no);
-		console.log(io.sockets.adapter.rooms);
 	});
 	socket.on('join2', function(project_list_no, roomName){
 		socket.roomName = roomName;
@@ -63,7 +61,6 @@ io.sockets.on('connection', function (socket){
 		project_room2 = socket.project_list_no+'/'+roomName;
 		
 		socket.join(socket.project_list_no+'/'+socket.roomName);
-		console.log(io.sockets.adapter.rooms);
 	});
 	
 	socket.on('disconnect',function(){
@@ -105,7 +102,6 @@ io.sockets.on('connection', function (socket){
 			,function (error, user_name){
 			client.query('select * from sprint_back_log where status <2 and sprint_no = ?', [data.sprint_no]
 				, function (error, sprint_back){
-				console.log(sprint_back.length);
 				for(var i =0; i < sprint_back.length; i++){
 				var content = '[' + project_name[0].project_name + '] ';
 					content	+= user_name[0].name + ' : 스크럼에서 스프린트백로그 '+ sprint_back[i].content + ' 을(를) 다음 스프린트로 넘겼습니다.';
@@ -667,5 +663,5 @@ io.sockets.on('connection', function (socket){
 });
 
 server.listen(port,function(){
-	console.log("connect server : " + port);
+	//서버시작;
 });
