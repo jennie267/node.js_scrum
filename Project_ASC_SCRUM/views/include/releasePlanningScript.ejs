@@ -121,7 +121,7 @@
     });
         
 	function popupOpen(chatName) {
-		var popupUrl = "http://52.78.100.100:3000/chats/" + chatName;
+		var popupUrl = "localhost:3000/chats/" + chatName;
 		var popUrl = popupUrl; //팝업창에 출력될 페이지 URL
 
 		var cw = screen.availWidth; // 화면너비
@@ -165,7 +165,7 @@
 		  confirmButtonText: 'YES',
 		  cancelButtonText: 'NO'
 		}).then(function () {
-			location.href = 'http://52.78.100.100:80';
+			location.href = 'localhost:80';
 		})
 	  
   });
