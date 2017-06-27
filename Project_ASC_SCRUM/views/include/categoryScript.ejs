@@ -1,11 +1,15 @@
-//불러 온다 카테고리
+	/**
+	 *	전체 카테고리 리스트 송신
+	 */
 	function categoryLi() {
 		socket.emit('categoryList', {
 			scrum_no : <%=scrum_no%>
 		});
 	};
 	categoryLi();		
-	//불러서 넣는다 카테고리
+	/**
+	 *	전체 카테고리 리스트 수신
+	 */
 	socket.on('categoryList', function (data){
 		$('#CategoryList').html('');
 		var text = $('#CategoryList');
@@ -41,8 +45,11 @@
       
 	});
 	var originText = '';
+	
+	/**
+	 *	카테고리 수정 준비
+	 */
 	function editCate() { 
-		//설정 한다 수정!!
 		$('.editCate').on('click', function(e) {
 			e.preventDefault();
 				
@@ -58,7 +65,8 @@
 			//글을 쓴다
 			var text = $(this).parent().parent().next().next().children().children();
 			originText = $(text).val();	
-			//채팅 속성 설정
+			
+			//채팅 속성 재설정
 			text.removeAttr('disabled');
 			text.removeAttr('style');
 			text.attr('style', 'background-color:white');
@@ -70,10 +78,11 @@
 		});
 	};
 		
+	/**
+	 *	카테고리 수정 완료
+	 */
 	function editingCate() {
-		//확정 한다 수정!!
 		$('.editingCate').on('click', function() {
-			//좌측 구간
 			//글을 쓴다
 			var text = $(this).parent().parent().next().next().children().children().val();
 			var no = $(this).parent().parent().next().next().children().children().attr('id');
@@ -90,7 +99,9 @@
 					loginId : <%=loginId%>
 				});
 				
-				/** 모든곳에 새로고침을 달아야함 추가 / 수정 / 삭제 */
+				/** 
+				 *	모든곳에 새로고침을 달아야함 추가 / 수정 / 삭제 
+				 */
 				categoryLi();
 		}	else {
 			swal('빈칸을 모두 채워주세요')
@@ -99,7 +110,9 @@
 		});
 	};
 		
-	//등록 한다 카테고리
+	/**
+	 *	카테고리 추가
+	 */
 	function addCate(){
 		$('.addCategory').on('click', function(){
 			var text = $('#text').val();
@@ -114,11 +127,15 @@
 			} else {
 					swal('빈칸을 모두 채워주세요');
 			}
-			/** 모든곳에 새로고침을 달아야함 추가 / 수정 / 삭제 */
-					categoryLi();
+			/** 
+			 *	모든곳에 새로고침을 달아야함 추가 / 수정 / 삭제 
+			 */
+			categoryLi();
 		});
 	};
-	//지운다 카테고리
+	/**
+	 *	카테고리 삭제
+	 */
 	function deleCate() {
 		$('.delCate').on('click',	function(e) {
 			e.preventDefault();
@@ -130,13 +147,17 @@
 				loginId : <%=loginId%>
 			});
 			
-			/** 모든곳에 새로고침을 달아야함 추가 / 수정 / 삭제 */
+			/** 
+			 *	모든곳에 새로고침을 달아야함 추가 / 수정 / 삭제 
+			 */
 			$('#CategoryList').html('');
 			categoryLi();
 		});
 	};
 	
-		//카테고리 모달 닫기
+		/**
+		 *	카테고리 모달 닫기
+		 */
 		function closeCate(){
 			$('.closeCate').on('click', function(e) {
 				$('#text').val('');
@@ -144,6 +165,8 @@
 			});
 		};
 		
-		//설정한다 초기세팅
+		/**
+		 *	초기세팅 설정
+		 */
 		closeCate();
 		addCate();

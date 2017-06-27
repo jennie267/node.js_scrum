@@ -1,8 +1,13 @@
-//선택된 스프린트 호출
+  /**
+   *	스프린트 관련 시작
+   *	현재 스프린트 시작 및 종료 날짜 실행
+   */
 	$('#SprintDate').on('click', function(){
 		sprintDetail();
 	});
-	
+	/**
+	 *	현재 스프린트 시작 및 종료 날짜 송신
+	 */
 	function sprintDetail() {
 		if($('.maxSprint').val() > 0){
 			var sprint_no = $('.maxSprint').val();
@@ -13,15 +18,19 @@
 			sprint_no : sprint_no
 		});
 	};
-	//스프린트 정보
+	/**
+	 *	현재 스프린트 시작 및 종료 날짜 수신
+	 */
 	socket.on('sprintDetail', function (data){
 		var da = data.sprint;
 		$('#start_date').val(da[0].start_date.substr(0,10));
 		$('#end_date').val(da[0].end_date.substr(0,10));
 	});		
 	
-	/** 스프린트 관련 */
-	/** 스프린트 넘어가기 */
+	/** 
+	 *	스프린트 Start
+	 *	다음 스프린트로 넘어가기 
+	 */
 	$('#nextSprintBtn').on("click", function(event) {
 		event.preventDefault();
 	// 	var chg = (decodeURIComponent('${cookie.name.value}'));
@@ -57,7 +66,9 @@
   });		  
 		return false;
 	});
-	/** 스프린트 제거 */
+	/** 
+	 *	스프린트 제거 
+	 */
 	$('#ClearSprintBtn').on("click", function(event) {
 		event.preventDefault();
 	// 	var chg = (decodeURIComponent('${cookie.name.value}'));
@@ -92,4 +103,6 @@
 		
 		return false;
 	});
-	/** 스프린트 관련 종료 */
+	/** 
+	 *	스프린트 관련 종료 
+	 */

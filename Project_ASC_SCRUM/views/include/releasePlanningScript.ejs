@@ -1,16 +1,23 @@
 <script>
 	
-	//SOCKET Open
+	/**
+	 *	Socket Open
+	 */
 	var socket = io();
 	var project_room0 = <%=project_list_no%>;
 	var project_room2 = <%=project_list_no%> + '/' + '<%=chat%>';
 	
+	/**
+	 *	첫 번째 Room 진입
+	 */
 	socket.connect(project_room0);
 	socket.emit("join0", project_room0);
 	
 	<% include ../include/categoryScript.ejs %>
 	<!-- /#page-wrapper -->
-	//유저스토리 디테일 
+	/**
+	 *	유저스토리 상세정보
+	 */ 
 	function releaseStoryLi() {
 		$('.DetailPoker').on('click', function(e){
 			var push = $(this).attr('value');
@@ -19,7 +26,9 @@
 			});
 		});
 	};
-	/** 마스터용 스토리 뿌리기 */
+	/**
+	 *	마스터용 유저스토리 출력 
+	 */
 	function releaseStoryLiMaster() {
 		$('.DetailPokerMaster').on('click', function(e){
 			var push = $(this).attr('value');
@@ -37,7 +46,9 @@
 		});
 	};
 			
-	//유저스토리 불러서 넣기
+	/**
+	 *	유저스토리 상세정보 부르기
+	 */
 	var cateNo;
 	socket.on('StoryDetail', function (data){
 		var da = data.data[0];
@@ -50,9 +61,10 @@
 		text += 'UserStory 목적    : '+da.so_that + "\n";
 		textfield.html(text);
 	});
-	//포커 정보 부르기
 	
-	//포커 관련 모든 인원수 및 점수 부르기
+	/**
+	 *	포커 관련 모든 인원수 및 점수 부르기
+	 */
 	socket.on('Join_List', function (data){
 		var count = data.count[0].count;
 		var vote = data.vote[0].Vote;
@@ -114,7 +126,9 @@
 		
 	});
 	
-	/*채팅창 팝업*/
+	/**
+	 *	채팅창 팝업
+	 */
 	$(function() {
 		$("#chatBtn").click(function() {
 			popupOpen('<%=chat%>');            
@@ -137,7 +151,9 @@
 		window.open(popUrl, "", popOption);
 	}
 	});
-		//스크롤 최상단으로 + 채팅
+	/**
+	 *	채팅
+	 */
 	$(function() {
         /* $(window).scroll(function() {
             if ($(this).scrollTop() > 500) {
@@ -153,7 +169,9 @@
             return false;
         });
     });
-	//logout
+	/**
+	 *	logout
+	 */
   $('.logoutBtn').on('click', function() {
 	  swal({
 		  title: '로그아웃 하시겠습니까?',
@@ -172,14 +190,12 @@
 	
 	
 	//여기까지가 기본 영역----------------------------
-	//팀원용 모달 영역-----------------------------
-	$('.DetailPoker').on('click', function (){
-	});
 		releaseStoryLi();
 		releaseStoryLiMaster();
 	
-	//여기까지가 팀원용 모달 영역-----------------------
-	//마스터용 모달 영역 -----------------------------------
+	/**
+	 *	마스터용 포커 영역
+	 */
 	$('.DetailPokerMaster').on('click', function (){
 		etcScore();
 		SetScore();
@@ -206,6 +222,9 @@
 		}	
 	});
 	}
+	/**
+	 *	현황 정보
+	 */
 	function etcScore(){
 	$('.ScoreModal').on('click', function(e){
 			var push = $('.PokerStory').val();
@@ -215,7 +234,7 @@
 				project_list_no : <%=project_list_no%>
 			});
 		});
-		//기타 점수 모달 영역---------
+		//현황 점수 영역---------
 		socket.on('PokerDetail', function (data){
 		var poker = data.poker;
 		var user = data.user;
@@ -268,12 +287,11 @@
 		
 	});
 	}
-	//여기까지가 기타점수 모달 영역-------------------------
 		
-		//여기까지가 마스터용 모달 영역 -------------------------
-		//팀원요 포커 영역-----------------
+	/**
+	 *	팀원용 포커 영역
+	 */
 		var check = 0;
-	//팀원용 포커
 	$('.score').on('click', function (e){
 		var text = $('.inputScore');
 		var score = $(this).attr('value');
@@ -309,6 +327,10 @@
 			}
 		});	
 	}
+	
+	/**
+	 *	투표 유효성
+	 */
 	function callFind(){	
 		if(check == 1){
 			socket.emit('PokerAdd', {
@@ -335,5 +357,4 @@
 				check = 0;
 			}
 	};
-	//여기까지가 팀원 포커 모달 영역------------------------
 </script>

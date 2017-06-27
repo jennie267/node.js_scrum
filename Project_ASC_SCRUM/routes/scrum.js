@@ -1,5 +1,8 @@
-/*
- * GET users listing.
+/**
+ * @개요   : Express Framework 
+ * @파일명 : scrum.js
+ * @작성자 : 마 민
+ * @작성일 : 2017.05.27 
  */
 var mysql = require('mysql');
 var client = mysql.createConnection({
@@ -8,6 +11,9 @@ var client = mysql.createConnection({
    database : 'project_asc'
 });
 
+/**
+ * render To taskBoard.ejs 
+ */
 exports.taskboard = function(request, response){
 	var cookie = request.cookies;
 	var photo = request.cookies.photoCookie;
@@ -69,6 +75,10 @@ exports.taskboard = function(request, response){
 		});
 	});
 };
+
+/**
+ * render To releasePlanning.ejs 
+ */
 exports.releasePlanning = function(request, response){
 	var cookie = request.cookies;
 	var photo = request.cookies.photoCookie;
