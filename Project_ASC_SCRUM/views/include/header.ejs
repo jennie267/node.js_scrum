@@ -2,12 +2,12 @@
  <!-- Navigation -->
 	<nav class="navbar-default sidebar" role="navigation" style="background-color: #354555">
 		<div class="sidebar-nav navbar-collapse" id='myNavbar2'>
-  		<a href="localhost:80/lobby/selectProject"><img src="localhost:80/resources/images/logo.png" style="width:250px"></a>
+  		<a href="http://localhost:80/lobby/selectProject"><img src="http://localhost:80/resources/images/logo.png" style="width:250px"></a>
     	
     	<div class="row" id='modalWrapper'>
     		<div class="col-xs-2 col-sm-2 padding-accpeted">
 		  		<div class="profile">
-		  			<img src="localhost:80/resources/images/upload<%=photo%>">
+		  			<img src="http://localhost/resources/images/upload/asc/s_1b48e661-0575-4bd6-8349-db0735387fd9_%EC%A0%95%EC%8A%B9%ED%99%98%20%EC%9D%B4%EB%B0%94%EB%B3%B4%EC%95%BC.JPG   ">
 		  		</div>
       	</div>
       	<div class="col-xs-10 col-sm-10">
@@ -23,16 +23,16 @@
         		<a id='ganttChart'><img src="/images/menu/gantt.png" style="width: 50%; cursor:pointer;"></a>
         	</li>
         	<li>
-            <a id="burnDown"><img src="/images/menu/burnDown.png" style="width: 63%; cursor:pointer;"></a>
+            <a id="burnDown"><img src="/images/menu/burnDown.png" style="width: 63%; padding-right: 29px; cursor:pointer;"></a>
 					</li>
         	<li>
         		<a href="/scrum/taskBoard"><img src="/images/menu/scrum.png" style="width: 50%; cursor:pointer;"><span class="fa arrow"></span></a>
         		<ul class="nav nav-second-level">
         			<li>
-        				<a href="localhost:4567/taskBoard/<%=project_list_no%>/<%=Max%>/<%=loginId%>"><img src="/images/menu/task.png" style="width: 60%"></a>
+        				<a href="http://localhost:4567/taskBoard/<%=project_list_no%>/<%=Max%>/<%=loginId%>"><img src="/images/menu/task.png" style="width: 60%"></a>
         			</li>
         			<li>
-        				<a href="localhost:4567/releasePlanning/<%=project_list_no%>/<%=loginId%>"><img src="/images/menu/release.png" style="width: 70%"></a>
+        				<a href="http://localhost:4567/releasePlanning/<%=project_list_no%>/<%=loginId%>"><img src="/images/menu/release.png" style="width: 70%"></a>
         			</li>
       			</ul>
           	<!-- /.nav-second-level -->
@@ -56,41 +56,41 @@
 <!-- /.navbar-static-side -->
 </div>
 <script>
-	/**
-	 *	대시보드 페이지 이동
-	 */
+    /**
+     *  대시보드 페이지 이동
+     */
 	$('#dashBoard').on('click', function() {
-		location.href="localhost:80/gantt/actionChart/"+<%=project_list_no%>+"/"+<%=loginId%>+"/go";
+		location.href="http://localhost:80/gantt/actionChart/"+<%=project_list_no%>+"/"+<%=loginId%>+"/go";
 	});
-	/**
-	 *	간트차트 페이지 이동
-	 */
+    /**
+     *  간트차트 페이지 이동
+     */
 	$('#ganttChart').on('click', function() {
-		location.href="localhost:80/gantt/ganttChart/"+<%=project_list_no%>+"/"+<%=loginId%>;
+		location.href="http://localhost:80/gantt/ganttChart/"+<%=project_list_no%>+"/"+<%=loginId%>;
 	});
-	/**
-	 *	번다운 차트 페이지 이동
-	 */
+    /**
+     *  번다운 차트 페이지 이동
+     */
 	$('#burnDown').on('click', function() {
-		location.href="localhost:80/burnDown/chart/"+<%=project_list_no%>+"/"+<%=loginId%>;
+		location.href="http://localhost:80/burnDown/chart/"+<%=project_list_no%>+"/"+<%=loginId%>;
 	});
-	/**
-	 *	자료실 페이지 이동
-	 */
+    /**
+     *  자료실 페이지 이동
+     */
 	$('#library').on('click', function() {
-		location.href="localhost:80/project/library/"+<%=project_list_no%>+"/"+<%=loginId%>;
+		location.href="http://localhost:80/project/library/"+<%=project_list_no%>+"/"+<%=loginId%>;
 	});
-	/**
-	 *	참여멤버 페이지 이동
-	 */
+    /**
+     *  참여멤버 페이지 이동
+     */
 	$('#member').on('click', function() {
-		location.href="localhost:80/project/member/"+<%=project_list_no%>;
+		location.href="http://localhost:80/project/member/"+<%=project_list_no%>;
 	});
-	/**
-	 *	로그 페이지 이동
-	 */
+    /**
+     *  로그 페이지 이동
+     */
 	$('#log').on('click', function() {
-		location.href="localhost:80/project/log/"+<%=project_list_no%>+"/"+<%=loginId%>;
+		location.href="http://localhost:80/project/log/"+<%=project_list_no%>+"/"+<%=loginId%>;
 	});
 
 </script>

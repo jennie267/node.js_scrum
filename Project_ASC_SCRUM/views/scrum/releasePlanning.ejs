@@ -1,9 +1,3 @@
-<!--
- * @개요   : ReleasePlanning 페이지  
- * @파일명 : releasePlanning.ejs
- * @작성자 : 마 민
- * @작성일 : 2017.05.24 
- -->
 <head>
 	<meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -34,14 +28,15 @@
 <style>
 	.profile {width:70px; height:70px; border-radius:70px; overflow:hidden; margin-left: 70%; float: left;}
 	.profile img {height:70px; width:70px;}
+
 	.sidebar .sidebar-nav.navbar-collapse{
-  overflow: hidden;
-  border: 1px solid #354555;  
-}
-	.padding-accpeted {
-		padding-right : 15px;
-		padding-left : 15px;
-	}
+   	overflow: hidden;
+  	 border: 1px solid #354555;  
+ 	}	
+ 	.padding-accpeted {
+ 		padding-right : 15px;
+ 		padding-left : 15px;
+ 	}
 </style>
 <style>
 	img#chatBtn {
@@ -67,9 +62,9 @@
   <div class="row">
     <div class="col-lg-12">
       <div class="page-header" id="taskBoardBtn">
-        <a class="btn btn-default" data-toggle="modal" data-target="#categoryModal"> Category </a> 
-        <a href="localhost:4567/taskboard/<%=project_list_no%>/<%=Max%>/<%=loginId%>" class="btn btn-default"> Task Board </a> 
-        <a href="localhost:4567/releasePlanning/<%=project_list_no%>/<%=loginId%>" class="btn btn-default active"> Release Planning </a>
+        <a class="btn btn-default" data-toggle="modal" data-target="#categoryModal"> 카테고리 </a> 
+        <a href="http://localhost:4567/taskboard/<%=project_list_no%>/<%=Max%>/<%=loginId%>" class="btn btn-default"> 태스크보드 </a> 
+        <a href="http://localhost:4567/releasePlanning/<%=project_list_no%>/<%=loginId%>" class="btn btn-default active"> 릴리즈 플래닝 </a>
     		<label style=''>　빨강 : 투표 대기 / 노랑 : 투표 진행 중 / 회색 : 투표 완료</label>
       </div>
     </div>
